@@ -22,7 +22,7 @@ title = "Code review"
 description = "Review the implementation per skill:code-review. Create PR. This is a human gate — escalate with review context and wait for approval."
 needs = ["test"]
 acceptance = "PR created, review feedback addressed, human approval received"
-gate = "human"
+gate = { type = "human" }
 
 [[steps]]
 id = "merge"

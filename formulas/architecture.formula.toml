@@ -22,7 +22,7 @@ title = "Human direction on {{topic}}"
 description = "HUMAN GATE. Escalate with the options document. Present the trade-offs clearly. Do NOT proceed until the human selects a direction. Exit with ESCALATED status."
 needs = ["options"]
 acceptance = "Human has selected a direction and provided any additional constraints"
-gate = "human"
+gate = { type = "human" }
 
 [[steps]]
 id = "spec"
@@ -37,7 +37,7 @@ title = "Spec review"
 description = "HUMAN GATE. Present the spec for review. The human verifies the spec matches their intent before implementation begins. Escalate and wait."
 needs = ["spec"]
 acceptance = "Human has approved the spec or provided revision feedback (iterate until approved)"
-gate = "human"
+gate = { type = "human" }
 
 [[steps]]
 id = "decompose"

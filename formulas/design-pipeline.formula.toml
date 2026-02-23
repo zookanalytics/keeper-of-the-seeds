@@ -53,7 +53,7 @@ title = "Human review of {{topic}} design"
 needs = ["synthesize"]
 description = "HUMAN GATE. Present the synthesis to the human. Include: the revised recommendation, key conflicts that need resolution, and any open questions. The human may approve, request revisions (cycle back to draft), or redirect. Mail the mayor with DESIGN REVIEW summary."
 acceptance = "Human has reviewed synthesis and provided direction (approve, revise, or redirect)"
-gate = "human"
+gate = { type = "human" }
 
 [[steps]]
 id = "finalize"
