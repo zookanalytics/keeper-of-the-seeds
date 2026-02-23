@@ -71,6 +71,40 @@ Deliverables:
 - Bead design field updated with final summary"""
 acceptance = "Design document finalized, implementation beads created (if approved), branch ready for merge or continued iteration"
 
+[[steps]]
+id = "retro"
+title = "Retrospective: {{topic}} design pipeline"
+needs = ["finalize"]
+description = """Analyze this workflow execution and produce a retro document. Review:
+
+1. Process compliance — did each step follow its skill? Were any steps rushed or skipped?
+2. Artifact quality — was the research thorough? Was the design well-reasoned? Were reviews substantive or rubber-stamps?
+3. Review convoy effectiveness — did the lenses produce distinct findings? Were there redundant or missing angles?
+4. Rationalizations observed — any moments where the agent (or reviewers) cut corners, skipped checks, or made excuses? Capture exact rationalizations for skill improvement.
+5. Cycle efficiency — what could have been parallelized? Where did the human wait unnecessarily? Where did agents wait unnecessarily?
+6. Skill gaps — did any step lack a skill that would have helped? Were existing skills adequate?
+
+File ks beads for actionable findings. Link to existing ks issues if the pattern is already tracked.
+For each new rationalization observed, note which skill's rationalization table should be updated.
+
+Commit retro document to the branch."""
+acceptance = "Retro document committed with findings, ks beads filed for actionable items, rationalizations captured"
+
+[[steps]]
+id = "retro-human"
+title = "Human retro checkpoint for {{topic}}"
+needs = ["retro"]
+description = """HUMAN GATE. Present the retro findings to the human. Include:
+
+1. Summary of what worked and what didn't in this pipeline run
+2. Proposed keeper improvements (skill updates, formula changes, new skills needed)
+3. New rationalizations to add to skill tables
+4. Any beads filed and their priority
+
+The human decides which improvements to pursue. Approved improvements become keeper beads dispatched through standard-feature or the skill-improvement lifecycle (red test → draft → green test → merge)."""
+acceptance = "Human has reviewed retro findings and directed which improvements to pursue"
+gate = { type = "human" }
+
 [vars]
 [vars.topic]
 description = "The design topic or problem to investigate"

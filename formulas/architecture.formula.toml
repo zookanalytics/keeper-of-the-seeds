@@ -53,6 +53,38 @@ description = "After all sub-beads complete, verify the aggregate result matches
 needs = ["decompose"]
 acceptance = "Implementation matches spec, integration verified, no gaps"
 
+[[steps]]
+id = "retro"
+title = "Retrospective: {{topic}} architecture workflow"
+needs = ["verify"]
+description = """Analyze this workflow execution and produce a retro document. Review:
+
+1. Process compliance — did each step follow its skill? Were human gates respected?
+2. Spec quality — did the spec accurately predict implementation needs? Were there surprises?
+3. Decomposition effectiveness — were sub-beads well-scoped? Did any need re-scoping?
+4. Rationalizations observed — any moments where agents cut corners, skipped checks, or made excuses? Capture exact rationalizations for skill improvement.
+5. Cycle efficiency — where did the human wait unnecessarily? Where could polecats have worked in parallel?
+6. Skill gaps — did any step lack a skill that would have helped?
+
+File ks beads for actionable findings. Link to existing ks issues if the pattern is already tracked.
+Commit retro document to the branch."""
+acceptance = "Retro document committed with findings, ks beads filed for actionable items, rationalizations captured"
+
+[[steps]]
+id = "retro-human"
+title = "Human retro checkpoint for {{topic}}"
+needs = ["retro"]
+description = """HUMAN GATE. Present the retro findings to the human. Include:
+
+1. Summary of what worked and what didn't
+2. Proposed keeper improvements (skill updates, formula changes)
+3. New rationalizations to add to skill tables
+4. Beads filed and their priority
+
+Human decides which improvements to pursue. Approved improvements become keeper beads."""
+acceptance = "Human has reviewed retro findings and directed which improvements to pursue"
+gate = { type = "human" }
+
 [vars]
 [vars.topic]
 description = "The architecture decision or design topic"
