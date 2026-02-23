@@ -1,0 +1,73 @@
+description = "Multi-phase design workflow with parallel review convoy. Progresses from research through drafting, multi-angle review, and human-gated synthesis. Dispatch with: gt sling <bead> <rig> --no-merge"
+formula = "design-pipeline"
+type = "workflow"
+version = 1
+
+[[steps]]
+id = "research"
+title = "Research {{topic}}"
+description = "Investigate the problem space per skill:research. Survey internal context (code, docs, beads, prior art), validate assumptions, research externally as needed. Produce a structured findings document committed to the branch. Do NOT propose solutions — map the territory."
+acceptance = "Research document committed with constraints, findings, assumptions table, prior art, and open questions"
+
+[[steps]]
+id = "draft"
+title = "Draft design for {{topic}}"
+needs = ["research"]
+description = "Synthesize research into a design document. Propose 2-4 options with tradeoffs. Include a recommendation with justification. Address open questions from research where possible; flag remaining unknowns. Commit the design doc to the branch and update the bead design field: bd update <issue> --design \"<summary>\""
+acceptance = "Design document committed with options, tradeoffs, recommendation, and unknowns flagged"
+
+[[steps]]
+id = "dispatch-reviews"
+title = "Dispatch review convoy for {{topic}}"
+needs = ["draft"]
+description = """Spawn child beads for parallel document review. Each child bead gets a different review lens per skill:document-review. Minimum lenses: feasibility, adversarial, completeness. Additional lenses based on topic (security, user-impact, cost, etc.).
+
+Create child beads:
+  bd create -t task "Review {{topic}} design: [lens]" --parent <this-bead>
+
+Dispatch via convoy:
+  gt convoy create <child-bead-ids> --subject "{{topic}} review convoy"
+  gt sling <child-bead> <rig> --no-merge  (for each child)
+
+Each reviewer commits their review to the same branch. Wait for all reviews to complete."""
+acceptance = "Review child beads created, dispatched as convoy, all reviews committed to branch"
+
+[[steps]]
+id = "synthesize"
+title = "Synthesize reviews for {{topic}}"
+needs = ["dispatch-reviews"]
+description = """Read all review documents from the convoy. Produce a synthesis:
+
+1. Consensus — what all reviewers agree on
+2. Conflicts — where reviewers disagree, with both sides stated
+3. Blockers — any BLOCK findings that must be resolved
+4. Open questions — questions that need human judgment
+5. Revised recommendation — update recommendation based on review feedback
+
+Commit synthesis to branch. Batch all questions for the human gate — don't ask them piecemeal."""
+acceptance = "Synthesis document committed with consensus, conflicts, blockers, open questions, and revised recommendation"
+
+[[steps]]
+id = "human-gate"
+title = "Human review of {{topic}} design"
+needs = ["synthesize"]
+description = "HUMAN GATE. Present the synthesis to the human. Include: the revised recommendation, key conflicts that need resolution, and any open questions. The human may approve, request revisions (cycle back to draft), or redirect. Mail the mayor with DESIGN REVIEW summary."
+acceptance = "Human has reviewed synthesis and provided direction (approve, revise, or redirect)"
+gate = "human"
+
+[[steps]]
+id = "finalize"
+title = "Finalize {{topic}} design"
+needs = ["human-gate"]
+description = """Apply human feedback. If approved: update design doc as final, close review child beads, update parent bead design field with final summary. If revisions requested: update the draft, optionally dispatch another review convoy, and cycle back through human-gate.
+
+Deliverables:
+- Final design document on branch
+- Implementation beads decomposed from the design (if human approves proceeding)
+- Bead design field updated with final summary"""
+acceptance = "Design document finalized, implementation beads created (if approved), branch ready for merge or continued iteration"
+
+[vars]
+[vars.topic]
+description = "The design topic or problem to investigate"
+required = true
