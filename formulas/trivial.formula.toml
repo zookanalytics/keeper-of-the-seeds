@@ -1,0 +1,22 @@
+description = "Single-step workflow for obvious fixes, config changes, typos, and documentation updates. The bead IS the spec. No design phase, no review gate."
+formula = "trivial"
+type = "workflow"
+version = 1
+
+[[steps]]
+id = "implement"
+title = "Fix {{issue}}"
+description = "Implement the fix described in the bead. This is a trivial change — no design needed, no ambiguity. Read the bead, make the change, verify it works."
+acceptance = "Change committed, tests pass (if applicable), no regressions"
+
+[[steps]]
+id = "submit"
+title = "Submit for merge"
+description = "Commit with clear message. Push to feature branch. Triage level 'auto' means CI is the gate, not human review."
+needs = ["implement"]
+acceptance = "Clean git status, pushed to feature branch, CI green"
+
+[vars]
+[vars.issue]
+description = "What needs fixing"
+required = true
