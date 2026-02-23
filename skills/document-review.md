@@ -102,6 +102,8 @@ If you catch yourself doing any of these, stop and restart the review:
 | "This section is too detailed for me to evaluate" | That's exactly the section where errors hide. Read it or flag that you couldn't evaluate it. |
 | "I agree with the overall direction so the details are fine" | Directional agreement and detail correctness are independent. Many good ideas fail in the details. |
 | "They probably considered this and left it out for brevity" | If it's not in the document, it wasn't considered. Flag it. |
+| "Cheapest/easiest first is the right deployment order" | Cheapest first optimizes for effort, not value. Ask: which option teaches us the most? |
+| "This assumption can be figured out during implementation" | If the design depends on it and it's unverified, it's a BLOCK. Flag it now. |
 
 ## Examples
 

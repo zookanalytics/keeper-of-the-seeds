@@ -6,8 +6,12 @@ version = 1
 [[steps]]
 id = "research"
 title = "Research {{topic}}"
-description = "Investigate the problem space per skill:research. Survey internal context (code, docs, beads, prior art), validate assumptions, research externally as needed. Produce a structured findings document committed to the branch. Do NOT propose solutions — map the territory."
-acceptance = "Research document committed with constraints, findings, assumptions table, prior art, and open questions"
+description = """Investigate the problem space per skill:research.
+
+Setup: Create a branch named after the parent bead (git checkout -b <bead-id>). Design artifacts go in docs/designs/<bead-id>-<descriptor>.md.
+
+Survey internal context (code, docs, beads, prior art), validate assumptions, research externally as needed. Produce a structured findings document committed to the branch. Do NOT propose solutions — map the territory."""
+acceptance = "Branch created, research document committed to docs/designs/ with constraints, findings, assumptions table, prior art, and open questions"
 
 [[steps]]
 id = "draft"

@@ -80,6 +80,8 @@ If you catch yourself doing any of these, stop and refocus:
 - Not because "the answer seems obvious" — obvious answers are often wrong
 - Not because "I already know this topic" — your knowledge may be outdated or context-specific
 - Not because "we're in a hurry" — bad research creates more work than slow research
+- Not because "research and draft blur together for familiar topics" — familiarity breeds overconfidence. The research format forces you to surface what you don't know.
+- Not because "the hook API can be figured out during implementation" — unverified assumptions in research become blockers in implementation
 
 ## Examples
 
