@@ -156,6 +156,49 @@ Keep skills concise. Agent context is finite:
 - On-demand skills: aim for <500 words in core sections
 - Heavy reference material: separate file, loaded only when needed
 
+## Merge Strategy
+
+Formulas can declare their expected merge strategy. The dispatcher (mayor) applies it at sling time via the --merge flag:
+
+| Strategy | Flag | When |
+|----------|------|------|
+| mr (default) | (none) | Standard work — enters merge queue, refinery merges |
+| no-merge | --no-merge | Work needing review — branch persists after gt done |
+| direct | --merge direct | Urgent fixes — pushes directly to main (rare) |
+
+**Convention:** Consult and architecture work SHOULD use --no-merge. Standard-feature and trivial MAY use default (mr) or --no-merge depending on the rig's review requirements.
+
+## Triage Level → Formula Mapping
+
+| Triage | Formula | Merge Strategy |
+|--------|---------|----------------|
+| auto | trivial | mr |
+| review | standard-feature | mr or --no-merge (rig-dependent) |
+| consult | consult | --no-merge |
+| plan | architecture | --no-merge |
+
+## Consult Bead Description Template
+
+When creating a consult bead, use this description pattern:
+
+```
+CONSULT: [topic]
+
+Investigate [problem description]. Your deliverable is a design document, not code.
+
+Produce:
+1. Problem analysis — constraints, existing patterns, prior art
+2. Options (2-3) — each with approach, tradeoffs, effort estimate
+3. Recommendation — which option and why
+4. Implementation sketch — what beads would we create to implement?
+
+Write findings to a design doc (committed to branch) and update the bead:
+  bd update <issue> --design "<summary>"
+
+Mail the mayor:
+  gt mail send mayor/ -s "CONSULT: [topic]" -m "<summary + recommendation>"
+```
+
 ## Hook Naming
 
 - Filename: descriptive of what it enforces (kebab-case)

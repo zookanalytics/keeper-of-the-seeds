@@ -1,0 +1,29 @@
+description = "Investigation workflow for work needing design discussion before implementation. Polecat produces a design document on a persistent branch; mayor reviews and creates implementation beads. Dispatch with: gt sling <bead> <rig> --no-merge"
+formula = "consult"
+type = "workflow"
+version = 1
+
+[[steps]]
+id = "research"
+title = "Investigate {{topic}}"
+description = "Explore the problem space. Read relevant code, docs, prior art. Understand constraints. Document findings. Do NOT propose solutions yet — understand the problem first."
+acceptance = "Problem space documented with constraints and relevant context"
+
+[[steps]]
+id = "propose"
+title = "Propose options for {{topic}}"
+needs = ["research"]
+description = "Write 2-3 distinct approaches. For each: describe approach, list tradeoffs, estimate effort. Include a recommended option with justification. Write findings to a design doc and update the bead design field: bd update <issue> --design \"<summary>\""
+acceptance = "Design doc committed with options, tradeoffs, and recommendation. Bead design field updated."
+
+[[steps]]
+id = "deliver"
+title = "Deliver design for review"
+needs = ["propose"]
+description = "Mail mayor with a CONSULT summary including your recommendation and key tradeoffs. Then proceed with normal gt done. Because this was slung with --no-merge, the branch persists for mayor review."
+acceptance = "Mayor mailed with CONSULT summary, gt done completed, branch persists"
+
+[vars]
+[vars.topic]
+description = "What needs investigation"
+required = true
