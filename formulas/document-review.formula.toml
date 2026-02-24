@@ -39,7 +39,9 @@ BLOCK/CONCERN/NOTE classification and a binary READY/NOT READY gate assessment.
 4. Synthesis step combines all findings into unified gate assessment
 """
 formula = "document-review"
-type = "convoy"
+# NOTE: intended type is "convoy" (parallel dispatch) — using "workflow" until
+# bd adds convoy as a valid formula type. Structure uses [[legs]] not [[steps]].
+type = "workflow"
 version = 1
 
 [inputs]

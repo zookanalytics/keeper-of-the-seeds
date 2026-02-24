@@ -3,11 +3,11 @@ formula = "design-pipeline"
 type = "workflow"
 version = 1
 
-[compose]
-
-[[compose.expand]]
-target = "dispatch-reviews"
-with = "document-review"
+# TODO: compose.expand with document-review convoy when bd supports convoy type
+# [compose]
+# [[compose.expand]]
+# target = "dispatch-reviews"
+# with = "document-review"
 
 [[steps]]
 id = "research"

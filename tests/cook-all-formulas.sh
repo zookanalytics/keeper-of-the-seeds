@@ -13,7 +13,7 @@ total=0
 for f in "$FORMULA_DIR"/*.formula.toml; do
   name="$(basename "$f")"
   total=$((total + 1))
-  if output=$(bd cook "$f" --dry-run 2>&1); then
+  if output=$(bd cook "$f" --dry-run --search-path "$FORMULA_DIR" 2>&1); then
     echo "  ok  $name"
   else
     echo "FAIL  $name"
