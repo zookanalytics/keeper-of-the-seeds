@@ -1,6 +1,6 @@
 ---
 name: acceptance-testing
-description: Use when writing acceptance tests before implementation as part of a TEA/ATDD workflow, when a formula step references skill:acceptance-testing
+description: Use when writing acceptance tests before implementation as part of a TEA/ATDD workflow, when a formula step references /acceptance-testing
 ---
 
 # Acceptance Testing (ATDD)
@@ -11,9 +11,9 @@ Write executable acceptance tests that encode the bead spec's acceptance criteri
 
 ## When to Use
 
-- Formula step references `skill:acceptance-testing`
+- Formula step references `/acceptance-testing`
 - TEA aspect injected a "write acceptance tests" step before implementation
-- **When NOT to use:** After implementation is written (that's regular testing, use skill:testing)
+- **When NOT to use:** After implementation is written (that's regular testing, use /testing)
 
 ## How to Execute
 

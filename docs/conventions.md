@@ -115,8 +115,9 @@ The `checklist` field replaces inline `acceptance` criteria. When a step has a `
 ## Skill Naming
 
 - Filename: `<name>.md` (kebab-case)
+- Location: `skills/<name>.md` (source of truth), symlinked into `.claude/commands/<name>.md`
 - Examples: `code-review.md`, `spec-writing.md`
-- Formula steps reference skills as `skill:<name>` (without extension)
+- Formula steps reference skills as `/<name>` (slash command invocation)
 - Use active voice, verb-first when naming: `code-review` not `review-of-code`
 
 ### Skill Frontmatter
@@ -224,10 +225,10 @@ Only add rationalizations observed during actual testing, not hypothetical ones.
 ### Cross-Referencing Skills
 
 Use explicit requirement markers:
-- `**REQUIRED:** Follow skill:testing for test execution`
-- `**BACKGROUND:** Read skill:code-review first`
+- `**REQUIRED:** Invoke /testing for test execution`
+- `**BACKGROUND:** Invoke /code-review first`
 
-Do not use bare `skill:<name>` references without indicating whether the skill is required or optional context.
+Do not use bare `/<name>` references without indicating whether the skill is required or optional context.
 
 ### Token Budget
 
@@ -328,7 +329,7 @@ and simple designs succeed through operational discipline.
 
 communication_style: Direct and specific. Leads with concrete technical
 risks. Cites specific failure scenarios rather than abstract concerns.
-Uses BLOCK/CONCERN/NOTE classification per skill:document-review.
+Uses BLOCK/CONCERN/NOTE classification per /document-review.
 
 principles:
 - Channel expert systems engineer thinking: draw upon deep knowledge of
@@ -552,7 +553,7 @@ Follow conventional commits scoped to the pillar:
 
 ## Squash-Merge Convention
 
-All merges to `main` use GitHub's squash-merge via PR. See **skill:pr-merge** for the full procedure. This produces one commit per bead on main, making `git log --oneline` a readable changelog.
+All merges to `main` use GitHub's squash-merge via PR. See **/pr-merge** for the full procedure. This produces one commit per bead on main, making `git log --oneline` a readable changelog.
 
 ### Squash Commit Format
 

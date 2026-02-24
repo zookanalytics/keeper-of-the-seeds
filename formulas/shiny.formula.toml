@@ -6,7 +6,7 @@ version = 1
 [[steps]]
 id = "design"
 title = "Design {{feature}}"
-description = "Think carefully about architecture before writing code per skill:implementation. Consider: How does this fit into the existing system? What are the edge cases? What could go wrong? Is there a simpler approach? Commit a design doc covering approach, trade-offs, and files to change."
+description = "Think carefully about architecture before writing code per /implementation. Consider: How does this fit into the existing system? What are the edge cases? What could go wrong? Is there a simpler approach? Commit a design doc covering approach, trade-offs, and files to change."
 checklist = "design-drafted"
 
 [[steps]]
@@ -20,28 +20,28 @@ checklist = "design-reviewed"
 id = "implement"
 title = "Implement {{feature}}"
 needs = ["review-design"]
-description = "Write the code per skill:implementation. Follow the reviewed design. Keep changes focused — don't gold-plate."
+description = "Write the code per /implementation. Follow the reviewed design. Keep changes focused — don't gold-plate."
 checklist = "impl-ready"
 
 [[steps]]
 id = "review"
 title = "Review implementation"
 needs = ["implement"]
-description = "Review the implementation per skill:code-review. Check: Does it match the design? Are there obvious bugs? Is it readable and maintainable? Are there security concerns?"
+description = "Review the implementation per /code-review. Check: Does it match the design? Are there obvious bugs? Is it readable and maintainable? Are there security concerns?"
 checklist = "review-complete"
 
 [[steps]]
 id = "test"
 title = "Test {{feature}}"
 needs = ["review"]
-description = "Write and run tests per skill:testing. Unit tests for new code, integration tests if touching boundaries. Run full test suite, fix regressions."
+description = "Write and run tests per /testing. Unit tests for new code, integration tests if touching boundaries. Run full test suite, fix regressions."
 checklist = "tests-pass"
 
 [[steps]]
 id = "submit"
 title = "Submit for merge"
 needs = ["test"]
-description = "Submit per skill:pr-merge. Push branch, open PR via gh CLI with title 'type(scope): summary (bead-id)', wait for CI, squash-merge. Final check: git status clean before push."
+description = "Submit per /pr-merge. Push branch, open PR via gh CLI with title 'type(scope): summary (bead-id)', wait for CI, squash-merge. Final check: git status clean before push."
 checklist = "merge-ready"
 
 [vars]

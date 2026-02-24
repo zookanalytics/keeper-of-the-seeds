@@ -1,6 +1,6 @@
 ---
 name: research
-description: Use when investigating a problem space before proposing solutions, when a formula step references skill:research, when validating assumptions with external sources
+description: Use when investigating a problem space before proposing solutions, when a formula step references /research, when validating assumptions with external sources
 expert: Channel expert analyst thinking — draw upon deep knowledge of systematic literature review, assumption mapping, constraint analysis, and evidence-based reasoning.
 ---
 
@@ -12,13 +12,13 @@ Research maps the problem space before anyone proposes solutions. **Core princip
 
 ## When to Use
 
-- Formula steps referencing `skill:research`
+- Formula steps referencing `/research`
 - The research step in `consult`, `architecture`, and `design-pipeline` workflows
 - Investigating a topic where assumptions need validation before design work begins
 
 **When NOT to use:**
 - When the problem is already well-understood and scoped — go straight to implementation
-- When you're reviewing an existing document — use `skill:document-review` instead
+- When you're reviewing an existing document — use `/document-review` instead
 - When the bead spec already contains a complete problem analysis — don't redo work
 
 ## How to Execute

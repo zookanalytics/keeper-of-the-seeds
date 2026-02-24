@@ -61,7 +61,7 @@ keeper/
 
 Keeper is mounted as a Gas Town rig (short name: `keeper`, prefix: `ks`). Any project rig can file improvement beads against it using the `ks` prefix.
 
-**Skill resolution:** Formula steps reference `skill:<name>`, which agents resolve to `~/gt/keeper/skills/<name>.md`.
+**Skill resolution:** Skills are available as slash commands (`/<name>`) via `.claude/commands/` symlinks to `skills/<name>.md`.
 
 **Triage levels** determine human involvement for each bead:
 

@@ -12,7 +12,7 @@ version = 1
 [[steps]]
 id = "research"
 title = "Research {{topic}}"
-description = """Investigate the problem space per skill:research.
+description = """Investigate the problem space per /research.
 
 Setup: Create a branch named after the parent bead (git checkout -b <bead-id>). Design artifacts go in docs/designs/<bead-id>-<descriptor>.md.
 
@@ -33,7 +33,7 @@ needs = ["draft"]
 description = """Parallel multi-lens document review. Expanded by compose.expand with document-review convoy formula.
 
 Minimum lenses: feasibility, adversarial, completeness. Additional lenses based on topic scope.
-Each reviewer applies skill:document-review with their assigned lens. Convoy synthesis produces
+Each reviewer applies /document-review with their assigned lens. Convoy synthesis produces
 a unified review with BLOCK/CONCERN/NOTE findings, gate assessment, and revised recommendation.
 
 All reviews and synthesis committed to the branch."""

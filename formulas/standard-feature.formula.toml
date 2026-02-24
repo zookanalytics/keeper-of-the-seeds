@@ -13,20 +13,20 @@ checklist = "spec-understood"
 id = "implement"
 title = "Implement {{feature}}"
 needs = ["spec-check"]
-description = "Implement the feature per skill:implementation. Read the bead spec, understand scope, write the code. Keep changes focused — don't gold-plate."
+description = "Implement the feature per /implementation. Read the bead spec, understand scope, write the code. Keep changes focused — don't gold-plate."
 checklist = "impl-ready"
 
 [[steps]]
 id = "test"
 title = "Test {{feature}}"
-description = "Write and run tests per skill:testing. Unit tests for new code, integration tests if touching boundaries. Run full test suite, fix regressions."
+description = "Write and run tests per /testing. Unit tests for new code, integration tests if touching boundaries. Run full test suite, fix regressions."
 needs = ["implement"]
 checklist = "tests-pass"
 
 [[steps]]
 id = "review"
 title = "Code review"
-description = "Review the implementation per skill:code-review. Create PR. This is a human gate — escalate with review context and wait for approval."
+description = "Review the implementation per /code-review. Create PR. This is a human gate — escalate with review context and wait for approval."
 needs = ["test"]
 checklist = "review-complete"
 gate = { type = "human" }
@@ -34,7 +34,7 @@ gate = { type = "human" }
 [[steps]]
 id = "merge"
 title = "Merge"
-description = "Merge per skill:pr-merge. Push branch, open PR via gh CLI with title 'type(scope): summary (bead-id)', wait for CI, squash-merge. Verify merge commit on main."
+description = "Merge per /pr-merge. Push branch, open PR via gh CLI with title 'type(scope): summary (bead-id)', wait for CI, squash-merge. Verify merge commit on main."
 needs = ["review"]
 checklist = "merge-ready"
 

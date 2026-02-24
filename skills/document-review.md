@@ -1,6 +1,6 @@
 ---
 name: document-review
-description: Use when reviewing design documents, research findings, specs, or proposals before they advance to the next phase, when a formula step references skill:document-review
+description: Use when reviewing design documents, research findings, specs, or proposals before they advance to the next phase, when a formula step references /document-review
 expert: Channel expert technical reviewer thinking — draw upon deep knowledge of systems design evaluation, requirements traceability, logical consistency analysis, and risk assessment frameworks.
 ---
 
@@ -12,12 +12,12 @@ Document review evaluates a design artifact against specific criteria before it 
 
 ## When to Use
 
-- Formula steps referencing `skill:document-review`
+- Formula steps referencing `/document-review`
 - Reviewing design documents, research findings, architecture proposals, or specs
 - When dispatched as part of a review convoy with an assigned lens
 
 **When NOT to use:**
-- Code review — use `skill:code-review` instead
+- Code review — use `/code-review` instead
 - When the document is still being drafted — review committed artifacts, not drafts
 - When you're the author reviewing your own work — self-review is a different process
 

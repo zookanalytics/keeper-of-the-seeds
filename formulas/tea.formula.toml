@@ -10,7 +10,7 @@ target = "implement"
 [[advice.around.before]]
 id = "{step.id}-acceptance-tests"
 title = "Write failing acceptance tests before {step.id}"
-description = "Per skill:acceptance-testing, extract acceptance criteria from the bead spec and write executable tests encoding each criterion. Run the tests — they MUST fail (red). If any test passes before implementation, it is not testing new behavior. Commit the failing tests before proceeding to implementation."
+description = "Per /acceptance-testing, extract acceptance criteria from the bead spec and write executable tests encoding each criterion. Run the tests — they MUST fail (red). If any test passes before implementation, it is not testing new behavior. Commit the failing tests before proceeding to implementation."
 checklist = "acceptance-tests-written"
 
 [[advice]]

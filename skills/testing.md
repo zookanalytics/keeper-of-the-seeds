@@ -1,6 +1,6 @@
 ---
 name: testing
-description: Use when writing and running tests for implemented code, when a formula step references skill:testing
+description: Use when writing and running tests for implemented code, when a formula step references /testing
 expert: Channel expert QA engineer thinking — draw upon deep knowledge of boundary value analysis, equivalence partitioning, regression testing strategy, and behavior-driven development.
 ---
 
@@ -8,7 +8,7 @@ expert: Channel expert QA engineer thinking — draw upon deep knowledge of boun
 
 ## When to Use
 
-Activated by formula steps referencing `skill:testing`. Typically the test step in `standard-feature` and similar workflows. Governs how an agent writes and runs tests for implemented code.
+Activated by formula steps referencing `/testing`. Typically the test step in `standard-feature` and similar workflows. Governs how an agent writes and runs tests for implemented code.
 
 ## What Good Looks Like
 
