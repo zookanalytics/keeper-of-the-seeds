@@ -1,0 +1,13 @@
+{
+  "type": "rig-settings",
+  "version": 1,
+  "merge_queue": {
+    "enabled": true,
+    "test_command": "bash tests/cook-all-formulas.sh",
+    "run_tests": true,
+    "delete_merged_branches": true
+  },
+  "workflow": {
+    "default_formula": "standard-feature"
+  }
+}
