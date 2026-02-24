@@ -465,3 +465,42 @@ Follow conventional commits scoped to the pillar:
 - `feat(hooks): add pre-dispatch classification validator`
 - `test(skills): red/green scenarios for implementation skill`
 - `docs: update validation methodology`
+
+## Squash-Merge Convention
+
+All merges to `main` use GitHub's squash-merge. This produces one commit per bead on main, making `git log --oneline` a readable changelog.
+
+### Squash Commit Format
+
+```
+type(scope): summary (bead-id)
+
+Extended description from PR body.
+```
+
+Example:
+```
+feat(formulas): add architecture-decision workflow (ks-abc12)
+```
+
+### Why Squash-Merge
+
+- **Clean history**: One commit per bead on main, no merge commits or WIP noise
+- **Auditability**: Every main commit traces to a bead ID
+- **CI gates**: PRs run GitHub Actions before merge — nothing lands without passing checks
+- **PR artifacts**: GitHub preserves PR discussion, review comments, and CI results
+
+### Workflow
+
+1. Polecat pushes feature branch and runs `gt done`
+2. Refinery opens a PR from the feature branch to `main`
+3. GitHub Actions CI runs (TOML validation, shellcheck, formula cook)
+4. On CI pass, Refinery squash-merges via `gh pr merge --squash`
+5. Remote branch is cleaned up after merge
+
+### Repo Settings
+
+- Squash merge: **enabled** (only allowed merge method)
+- Regular merge: **disabled**
+- Rebase merge: **disabled**
+- Branch protection on `main`: require PR, require status checks (after CI lands)
