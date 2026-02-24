@@ -410,6 +410,7 @@ These principles govern how the three layers interact and evolve.
 | `docs/formula-authoring.md` | Complete formula reference (variables, types, lifecycle, composition) |
 | `docs/conventions.md` | Naming, format, and structure rules |
 | `docs/validation.md` | Superpowers testing methodology for skill validation |
+| `docs/design/` | Bead-prefixed design artifacts, review outputs, and synthesis docs |
 
 ### Full rig config schema
 

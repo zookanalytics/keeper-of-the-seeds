@@ -14,7 +14,7 @@ id = "research"
 title = "Research {{topic}}"
 description = """Investigate the problem space per /research.
 
-Setup: Create a branch named after the parent bead (git checkout -b <bead-id>). Design artifacts go in docs/designs/<bead-id>-<descriptor>.md.
+Setup: Create a branch named after the parent bead (git checkout -b <bead-id>). Design artifacts go in docs/design/<bead-id>-<descriptor>.md.
 
 Survey internal context (code, docs, beads, prior art), validate assumptions, research externally as needed. Produce a structured findings document committed to the branch. Do NOT propose solutions — map the territory."""
 checklist = "research-complete"

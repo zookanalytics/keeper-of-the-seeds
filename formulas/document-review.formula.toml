@@ -5,7 +5,7 @@
 # Results synthesized into a unified review with gate assessment.
 #
 # Standalone usage:
-#   gt formula run document-review --topic="Notification redesign" --document="docs/designs/ks-abc-notification.md"
+#   gt formula run document-review --topic="Notification redesign" --document="docs/design/ks-abc-notification.md"
 #
 # Composed into a workflow via compose.expand:
 #   [[compose.expand]]

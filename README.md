@@ -53,7 +53,7 @@ keeper/
 │   ├── brief.md       # Full product brief (start here for deep detail)
 │   ├── conventions.md # Naming, format, and structure rules
 │   ├── validation.md  # Skill validation methodology
-│   └── designs/       # Design artifacts from active beads
+│   └── design/        # Design artifacts from active beads
 └── .beads/            # Keeper rig backlog (prefix: ks)
 ```
 

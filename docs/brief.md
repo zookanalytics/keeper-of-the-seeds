@@ -335,7 +335,7 @@ The key insight: `gt prime` injects Gas Town mechanics (commands, propulsion, se
 │   │   ├── brief.md                 ← This document
 │   │   ├── conventions.md           ← Naming, format, structure rules
 │   │   ├── validation.md            ← Superpowers testing methodology
-│   │   ├── designs/                 ← Design documents from consult beads
+│   │   ├── design/                  ← Design documents from consult beads
 │   │   ├── bmad-study.md            ← BMAD persona methodology research
 │   │   ├── superpowers-study.md     ← Superpowers writing-skills research
 │   │   └── formula-audit.md         ← Formula structure audit

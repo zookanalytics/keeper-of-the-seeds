@@ -594,6 +594,53 @@ For discipline-enforcing skills, add a pressure scenario variant:
 - "[verbatim excuse 2]"
 ```
 
+## Docs Directory Structure
+
+The `docs/` directory contains two categories of documents in two locations.
+
+### Canonical docs (`docs/` root)
+
+Persistent reference documents that evolve with the project. Named for what they document, no bead prefix.
+
+| File | Purpose |
+|------|---------|
+| `architecture.md` | Three-layer model, rig adoption guide |
+| `brief.md` | Product brief — what keeper is and why |
+| `conventions.md` | Naming, format, and structure rules (this file) |
+| `formula-authoring.md` | Formula primitives, variables, lifecycle |
+| `validation.md` | Superpowers testing methodology |
+
+**Research studies** also live at `docs/` root with a `-study.md` or `-audit.md` suffix. These are reference material that informed keeper's design — consulted repeatedly, not point-in-time snapshots. If a study was produced by a bead, the bead ID is noted in the document header (not the filename).
+
+| File | Purpose |
+|------|---------|
+| `bmad-study.md` | BMAD-METHOD survey for keeper adoption |
+| `superpowers-study.md` | obra/superpowers skill validation methodology |
+| `formula-audit.md` | Gas Town built-in formula audit |
+| `git-workflow-patterns-study.md` | Git workflow enforcement patterns |
+
+### Bead artifacts (`docs/design/`)
+
+Point-in-time design documents, review outputs, and research tied to specific beads. Filenames start with the bead ID because the artifact IS the bead's output. Directory name follows Gas Town convention (`docs/design/`, singular).
+
+**Naming patterns:**
+
+| Pattern | Example | When |
+|---------|---------|------|
+| `<bead-id>-<descriptor>.md` | `ks-lzsrz-three-layer-architecture.md` | Primary design document |
+| `<bead-id>-<topic>-research.md` | `ks-on7br-rig-config-research.md` | Bead-scoped research |
+| `<bead-id>-<topic>-spike.md` | `ks-jiqsy-retro-spike.md` | Spike/experiment results |
+| `<bead-id>-review-<lens>.md` | `ks-lzsrz-review-feasibility.md` | Review convoy leg output |
+| `<bead-id>-synthesis.md` | `ks-lzsrz-synthesis.md` | Review convoy synthesis |
+
+**Review convoy naming:** Review legs use `<bead-id>-review-<lens>.md` where `<lens>` matches the convoy leg ID (e.g., `feasibility`, `adversarial`, `completeness`). The synthesis doc drops the lens: `<bead-id>-synthesis.md`.
+
+### Canonical vs artifact — the test
+
+- **Does it evolve with the project?** → Canonical doc at `docs/` root
+- **Is it the output of a specific bead?** → Bead artifact in `docs/design/`
+- **Is it reference research without a bead ID?** → Study at `docs/` root with `-study.md` suffix
+
 ## Commit Messages
 
 Follow conventional commits scoped to the pillar:
