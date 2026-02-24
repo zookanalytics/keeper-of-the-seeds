@@ -1,6 +1,7 @@
 ---
 name: document-review
 description: Use when reviewing design documents, research findings, specs, or proposals before they advance to the next phase, when a formula step references skill:document-review
+expert: Channel expert technical reviewer thinking — draw upon deep knowledge of systems design evaluation, requirements traceability, logical consistency analysis, and risk assessment frameworks.
 ---
 
 # Document Review

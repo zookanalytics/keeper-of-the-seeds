@@ -1,6 +1,7 @@
 ---
 name: implementation
 description: Use when implementing code from a bead spec, when a formula step references skill:implementation, when going from spec to committed code
+expert: Channel expert software engineer thinking — draw upon deep knowledge of clean code principles, design patterns, defensive programming, and incremental delivery practices.
 ---
 
 # Implementation

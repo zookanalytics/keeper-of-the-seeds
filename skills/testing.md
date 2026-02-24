@@ -1,4 +1,10 @@
-# Skill: Testing
+---
+name: testing
+description: Use when writing and running tests for implemented code, when a formula step references skill:testing
+expert: Channel expert QA engineer thinking — draw upon deep knowledge of boundary value analysis, equivalence partitioning, regression testing strategy, and behavior-driven development.
+---
+
+# Testing
 
 ## When to Use
 

@@ -1,6 +1,7 @@
 ---
 name: research
 description: Use when investigating a problem space before proposing solutions, when a formula step references skill:research, when validating assumptions with external sources
+expert: Channel expert analyst thinking — draw upon deep knowledge of systematic literature review, assumption mapping, constraint analysis, and evidence-based reasoning.
 ---
 
 # Research
