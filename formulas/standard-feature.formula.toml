@@ -7,21 +7,30 @@ version = 1
 id = "implement"
 title = "Implement {{feature}}"
 description = "Implement the feature per skill:implementation. Read the bead spec, understand scope, write the code. Keep changes focused — don't gold-plate."
-acceptance = "Feature code committed, compiles/runs without errors"
+acceptance = """
+Feature code committed: READY/NOT READY
+Compiles without errors: READY/NOT READY
+Runs without errors: READY/NOT READY"""
 
 [[steps]]
 id = "test"
 title = "Test {{feature}}"
 description = "Write and run tests per skill:testing. Unit tests for new code, integration tests if touching boundaries. Run full test suite, fix regressions."
 needs = ["implement"]
-acceptance = "Tests written, all tests pass, no regressions"
+acceptance = """
+Tests written: READY/NOT READY
+All tests pass: READY/NOT READY
+No regressions: READY/NOT READY"""
 
 [[steps]]
 id = "review"
 title = "Code review"
 description = "Review the implementation per skill:code-review. Create PR. This is a human gate — escalate with review context and wait for approval."
 needs = ["test"]
-acceptance = "PR created, review feedback addressed, human approval received"
+acceptance = """
+PR created: READY/NOT READY
+Review feedback addressed: READY/NOT READY
+Human approval received: READY/NOT READY"""
 gate = { type = "human" }
 
 [[steps]]
@@ -29,7 +38,9 @@ id = "merge"
 title = "Merge"
 description = "Merge the approved PR. Verify CI passes on the target branch post-merge."
 needs = ["review"]
-acceptance = "PR merged, CI green on target branch"
+acceptance = """
+PR merged: READY/NOT READY
+CI green on target branch: READY/NOT READY"""
 
 [vars]
 [vars.feature]

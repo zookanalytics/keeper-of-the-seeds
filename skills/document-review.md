@@ -62,8 +62,13 @@ The bead description or convoy dispatch specifies which lens to apply. If no len
 Lens: [declared lens]
 Reviewer: [agent/polecat name]
 
-### Summary
-[1-2 sentences: overall assessment and whether the document can advance]
+### Gate Assessment
+[For each lens key question, provide a binary verdict:]
+[Lens question 1]: READY/NOT READY
+[Lens question 2]: READY/NOT READY
+[Lens question 3]: READY/NOT READY
+
+Overall: READY / NOT READY
 
 ### BLOCK
 - [Section X]: [Finding. Why it blocks. Suggested resolution.]
@@ -78,6 +83,8 @@ Reviewer: [agent/polecat name]
 Sections reviewed: [list]
 Lens questions applied: [list which key questions were checked]
 ```
+
+The Gate Assessment section uses per-criterion binary READY/NOT READY status. Any single NOT READY with a BLOCK finding means the overall gate is NOT READY. CONCERN findings do not automatically block — the overall assessment can be READY with unresolved CONCERNs if they are acknowledged.
 
 ## Red Flags — STOP
 

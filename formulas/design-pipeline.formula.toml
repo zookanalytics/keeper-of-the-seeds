@@ -11,14 +11,25 @@ description = """Investigate the problem space per skill:research.
 Setup: Create a branch named after the parent bead (git checkout -b <bead-id>). Design artifacts go in docs/designs/<bead-id>-<descriptor>.md.
 
 Survey internal context (code, docs, beads, prior art), validate assumptions, research externally as needed. Produce a structured findings document committed to the branch. Do NOT propose solutions — map the territory."""
-acceptance = "Branch created, research document committed to docs/designs/ with constraints, findings, assumptions table, prior art, and open questions"
+acceptance = """
+Branch created: READY/NOT READY
+Research document committed to docs/designs/: READY/NOT READY
+Constraints documented: READY/NOT READY
+Findings recorded: READY/NOT READY
+Assumptions table included: READY/NOT READY
+Prior art surveyed: READY/NOT READY
+Open questions surfaced: READY/NOT READY"""
 
 [[steps]]
 id = "draft"
 title = "Draft design for {{topic}}"
 needs = ["research"]
 description = "Synthesize research into a design document. Propose 2-4 options with tradeoffs. Include a recommendation with justification. Address open questions from research where possible; flag remaining unknowns. Commit the design doc to the branch and update the bead design field: bd update <issue> --design \"<summary>\""
-acceptance = "Design document committed with options, tradeoffs, recommendation, and unknowns flagged"
+acceptance = """
+Design document committed: READY/NOT READY
+2-4 options with tradeoffs: READY/NOT READY
+Recommendation with justification: READY/NOT READY
+Unknowns flagged: READY/NOT READY"""
 
 [[steps]]
 id = "dispatch-reviews"
@@ -34,7 +45,10 @@ Dispatch via convoy:
   gt sling <child-bead> <rig> --no-merge  (for each child)
 
 Each reviewer commits their review to the same branch. Wait for all reviews to complete."""
-acceptance = "Review child beads created, dispatched as convoy, all reviews committed to branch"
+acceptance = """
+Review child beads created: READY/NOT READY
+Convoy dispatched: READY/NOT READY
+All reviews committed to branch: READY/NOT READY"""
 
 [[steps]]
 id = "synthesize"
@@ -49,14 +63,22 @@ description = """Read all review documents from the convoy. Produce a synthesis:
 5. Revised recommendation — update recommendation based on review feedback
 
 Commit synthesis to branch. Batch all questions for the human gate — don't ask them piecemeal."""
-acceptance = "Synthesis document committed with consensus, conflicts, blockers, open questions, and revised recommendation"
+acceptance = """
+Synthesis document committed: READY/NOT READY
+Consensus areas identified: READY/NOT READY
+Conflicts stated with both sides: READY/NOT READY
+Blockers listed: READY/NOT READY
+Open questions batched for human: READY/NOT READY
+Revised recommendation provided: READY/NOT READY"""
 
 [[steps]]
 id = "human-gate"
 title = "Human review of {{topic}} design"
 needs = ["synthesize"]
 description = "HUMAN GATE. Present the synthesis to the human. Include: the revised recommendation, key conflicts that need resolution, and any open questions. The human may approve, request revisions (cycle back to draft), or redirect. Mail the mayor with DESIGN REVIEW summary."
-acceptance = "Human has reviewed synthesis and provided direction (approve, revise, or redirect)"
+acceptance = """
+Human has reviewed synthesis: READY/NOT READY
+Direction provided (approve/revise/redirect): READY/NOT READY"""
 gate = { type = "human" }
 
 [[steps]]
@@ -69,7 +91,10 @@ Deliverables:
 - Final design document on branch
 - Implementation beads decomposed from the design (if human approves proceeding)
 - Bead design field updated with final summary"""
-acceptance = "Design document finalized, implementation beads created (if approved), branch ready for merge or continued iteration"
+acceptance = """
+Design document finalized: READY/NOT READY
+Implementation beads created (if approved): READY/NOT READY
+Branch ready for merge or continued iteration: READY/NOT READY"""
 
 [[steps]]
 id = "retro"
@@ -94,7 +119,11 @@ File ks beads for actionable findings. Link to existing ks issues if the pattern
 For each new rationalization observed, note which skill's rationalization table should be updated.
 
 Commit retro document to the branch."""
-acceptance = "Retro document committed with findings, ks beads filed for actionable items, rationalizations captured"
+acceptance = """
+Retro document committed: READY/NOT READY
+Findings documented: READY/NOT READY
+Beads filed for actionable items: READY/NOT READY
+Rationalizations captured: READY/NOT READY"""
 
 [[steps]]
 id = "retro-human"
@@ -117,7 +146,9 @@ was that the changes were too minor to warrant human review. This is the canonic
 example of the pattern this gate prevents: the agent deciding which of its own oversight
 steps to skip. No matter how small or obvious the findings seem, they MUST be presented
 here before any action is taken."""
-acceptance = "Human has reviewed retro findings and directed which improvements to pursue"
+acceptance = """
+Human has reviewed retro findings: READY/NOT READY
+Improvement direction provided: READY/NOT READY"""
 gate = { type = "human" }
 
 [vars]

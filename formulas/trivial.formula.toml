@@ -7,14 +7,20 @@ version = 1
 id = "implement"
 title = "Fix {{issue}}"
 description = "Implement the fix described in the bead. This is a trivial change — no design needed, no ambiguity. Read the bead, make the change, verify it works."
-acceptance = "Change committed, tests pass (if applicable), no regressions"
+acceptance = """
+Change committed: READY/NOT READY
+Tests pass (if applicable): READY/NOT READY
+No regressions: READY/NOT READY"""
 
 [[steps]]
 id = "submit"
 title = "Submit for merge"
 description = "Commit with clear message. Push to feature branch. Triage level 'auto' means CI is the gate, not human review."
 needs = ["implement"]
-acceptance = "Clean git status, pushed to feature branch, CI green"
+acceptance = """
+Clean git status: READY/NOT READY
+Pushed to feature branch: READY/NOT READY
+CI green: READY/NOT READY"""
 
 [vars]
 [vars.issue]
