@@ -22,7 +22,23 @@ Gas Town supports four formula types with distinct semantics:
 Formulas compose via:
 - `extends = ["base-formula"]` — inherit steps
 - `compose.aspects = ["security-audit"]` — weave cross-cutting concerns
-- `compose.expand` with `target` and `with` — replace a step with an expansion
+- `compose.expand` with `target` and `with` — replace a step with an expansion or convoy
+
+`compose.expand` works with both expansion and convoy formula types:
+- **Expansion**: Replaces a step with multiple sequential sub-steps (e.g., `rule-of-five`)
+- **Convoy**: Replaces a step with parallel legs + synthesis (e.g., `document-review`)
+
+```toml
+# Replace a step with an expansion (sequential sub-steps)
+[[compose.expand]]
+target = "implement"
+with = "rule-of-five"
+
+# Replace a step with a convoy (parallel execution + synthesis)
+[[compose.expand]]
+target = "dispatch-reviews"
+with = "document-review"
+```
 
 Prefer composition over copy-paste when creating formula variants.
 

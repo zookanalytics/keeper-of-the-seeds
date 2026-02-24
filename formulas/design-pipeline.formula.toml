@@ -3,6 +3,12 @@ formula = "design-pipeline"
 type = "workflow"
 version = 1
 
+[compose]
+
+[[compose.expand]]
+target = "dispatch-reviews"
+with = "document-review"
+
 [[steps]]
 id = "research"
 title = "Research {{topic}}"
@@ -33,48 +39,26 @@ Unknowns flagged: READY/NOT READY"""
 
 [[steps]]
 id = "dispatch-reviews"
-title = "Dispatch review convoy for {{topic}}"
+title = "Review {{topic}} design via convoy"
 needs = ["draft"]
-description = """Spawn child beads for parallel document review. Each child bead gets a different review lens per skill:document-review. Minimum lenses: feasibility, adversarial, completeness. Additional lenses based on topic (security, user-impact, cost, etc.).
+description = """Parallel multi-lens document review. Expanded by compose.expand with document-review convoy formula.
 
-Create child beads:
-  bd create -t task "Review {{topic}} design: [lens]" --parent <this-bead>
+Minimum lenses: feasibility, adversarial, completeness. Additional lenses based on topic scope.
+Each reviewer applies skill:document-review with their assigned lens. Convoy synthesis produces
+a unified review with BLOCK/CONCERN/NOTE findings, gate assessment, and revised recommendation.
 
-Dispatch via convoy:
-  gt convoy create <child-bead-ids> --subject "{{topic}} review convoy"
-  gt sling <child-bead> <rig> --no-merge  (for each child)
-
-Each reviewer commits their review to the same branch. Wait for all reviews to complete."""
+All reviews and synthesis committed to the branch."""
 acceptance = """
-Review child beads created: READY/NOT READY
-Convoy dispatched: READY/NOT READY
-All reviews committed to branch: READY/NOT READY"""
-
-[[steps]]
-id = "synthesize"
-title = "Synthesize reviews for {{topic}}"
-needs = ["dispatch-reviews"]
-description = """Read all review documents from the convoy. Produce a synthesis:
-
-1. Consensus — what all reviewers agree on
-2. Conflicts — where reviewers disagree, with both sides stated
-3. Blockers — any BLOCK findings that must be resolved
-4. Open questions — questions that need human judgment
-5. Revised recommendation — update recommendation based on review feedback
-
-Commit synthesis to branch. Batch all questions for the human gate — don't ask them piecemeal."""
-acceptance = """
+Review convoy dispatched: READY/NOT READY
+All lens reviews committed to branch: READY/NOT READY
 Synthesis document committed: READY/NOT READY
-Consensus areas identified: READY/NOT READY
-Conflicts stated with both sides: READY/NOT READY
-Blockers listed: READY/NOT READY
-Open questions batched for human: READY/NOT READY
-Revised recommendation provided: READY/NOT READY"""
+Gate assessment produced: READY/NOT READY
+Open questions batched for human gate: READY/NOT READY"""
 
 [[steps]]
 id = "human-gate"
 title = "Human review of {{topic}} design"
-needs = ["synthesize"]
+needs = ["dispatch-reviews"]
 description = "HUMAN GATE. Present the synthesis to the human. Include: the revised recommendation, key conflicts that need resolution, and any open questions. The human may approve, request revisions (cycle back to draft), or redirect. Mail the mayor with DESIGN REVIEW summary."
 acceptance = """
 Human has reviewed synthesis: READY/NOT READY
