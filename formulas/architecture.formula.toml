@@ -7,31 +7,21 @@ version = 1
 id = "research"
 title = "Research {{topic}}"
 description = "Investigate the problem space. Understand constraints, existing patterns, and prior art. Document findings. Do NOT propose solutions yet — understand the problem first."
-acceptance = """
-Problem space documented: READY/NOT READY
-Constraints identified: READY/NOT READY
-Existing patterns surveyed: READY/NOT READY
-Prior art catalogued: READY/NOT READY"""
+checklist = "research-complete"
 
 [[steps]]
 id = "options"
 title = "Generate options for {{topic}}"
 description = "Propose 2-4 distinct approaches. For each: describe the approach, list trade-offs, estimate effort, identify risks. Be honest about downsides — don't sell a preferred option."
 needs = ["research"]
-acceptance = """
-2-4 options documented: READY/NOT READY
-Trade-offs listed per option: READY/NOT READY
-Effort estimates provided: READY/NOT READY
-Risks identified per option: READY/NOT READY"""
+checklist = "options-documented"
 
 [[steps]]
 id = "direction"
 title = "Human direction on {{topic}}"
 description = "HUMAN GATE. Escalate with the options document. Present the trade-offs clearly. Do NOT proceed until the human selects a direction. Exit with ESCALATED status."
 needs = ["options"]
-acceptance = """
-Human direction selected: READY/NOT READY
-Additional constraints captured: READY/NOT READY"""
+checklist = "human-gate-passed"
 gate = { type = "human" }
 
 [[steps]]
@@ -39,19 +29,14 @@ id = "spec"
 title = "Write spec for {{topic}}"
 description = "Write a detailed implementation spec based on the chosen direction. Cover: what changes, file-by-file plan, edge cases, migration path (if applicable), testing strategy."
 needs = ["direction"]
-acceptance = """
-Approach defined: READY/NOT READY
-File plan complete: READY/NOT READY
-Edge cases documented: READY/NOT READY
-Testing strategy specified: READY/NOT READY
-Spec committed: READY/NOT READY"""
+checklist = "spec-complete"
 
 [[steps]]
 id = "spec-review"
 title = "Spec review"
 description = "HUMAN GATE. Present the spec for review. The human verifies the spec matches their intent before implementation begins. Escalate and wait."
 needs = ["spec"]
-acceptance = "Human has approved spec: READY/NOT READY"
+checklist = "human-gate-passed"
 gate = { type = "human" }
 
 [[steps]]
@@ -59,20 +44,14 @@ id = "decompose"
 title = "Decompose into sub-beads"
 description = "Break the approved spec into standard-feature sub-beads. Each sub-bead should be independently implementable and testable. Wire dependencies between them."
 needs = ["spec-review"]
-acceptance = """
-Sub-beads created: READY/NOT READY
-Each sub-bead independently implementable: READY/NOT READY
-Dependencies wired: READY/NOT READY"""
+checklist = "decomposition-complete"
 
 [[steps]]
 id = "verify"
 title = "Verify against spec"
 description = "After all sub-beads complete, verify the aggregate result matches the original spec. Check for integration issues between independently implemented pieces."
 needs = ["decompose"]
-acceptance = """
-Implementation matches spec: READY/NOT READY
-Integration verified: READY/NOT READY
-No gaps remaining: READY/NOT READY"""
+checklist = "verification-complete"
 
 [[steps]]
 id = "retro"
@@ -95,11 +74,7 @@ gates exist to prevent. See retro-human step.
 
 File ks beads for actionable findings. Link to existing ks issues if the pattern is already tracked.
 Commit retro document to the branch."""
-acceptance = """
-Retro document committed: READY/NOT READY
-Findings documented: READY/NOT READY
-Beads filed for actionable items: READY/NOT READY
-Rationalizations captured: READY/NOT READY"""
+checklist = "retro-complete"
 
 [[steps]]
 id = "retro-human"
@@ -119,9 +94,7 @@ This gate exists precisely because agents cannot be trusted to judge which overs
 steps are safe to skip. No matter how small or obvious the findings seem, they MUST
 be presented here before any action is taken. The agent deciding to skip its own
 oversight is the canonical failure mode this gate prevents."""
-acceptance = """
-Human has reviewed retro findings: READY/NOT READY
-Improvement direction provided: READY/NOT READY"""
+checklist = "human-gate-passed"
 gate = { type = "human" }
 
 [vars]

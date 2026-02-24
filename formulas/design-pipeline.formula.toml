@@ -17,25 +17,14 @@ description = """Investigate the problem space per skill:research.
 Setup: Create a branch named after the parent bead (git checkout -b <bead-id>). Design artifacts go in docs/designs/<bead-id>-<descriptor>.md.
 
 Survey internal context (code, docs, beads, prior art), validate assumptions, research externally as needed. Produce a structured findings document committed to the branch. Do NOT propose solutions — map the territory."""
-acceptance = """
-Branch created: READY/NOT READY
-Research document committed to docs/designs/: READY/NOT READY
-Constraints documented: READY/NOT READY
-Findings recorded: READY/NOT READY
-Assumptions table included: READY/NOT READY
-Prior art surveyed: READY/NOT READY
-Open questions surfaced: READY/NOT READY"""
+checklist = "research-complete"
 
 [[steps]]
 id = "draft"
 title = "Draft design for {{topic}}"
 needs = ["research"]
 description = "Synthesize research into a design document. Propose 2-4 options with tradeoffs. Include a recommendation with justification. Address open questions from research where possible; flag remaining unknowns. Commit the design doc to the branch and update the bead design field: bd update <issue> --design \"<summary>\""
-acceptance = """
-Design document committed: READY/NOT READY
-2-4 options with tradeoffs: READY/NOT READY
-Recommendation with justification: READY/NOT READY
-Unknowns flagged: READY/NOT READY"""
+checklist = "design-drafted"
 
 [[steps]]
 id = "dispatch-reviews"
@@ -48,21 +37,14 @@ Each reviewer applies skill:document-review with their assigned lens. Convoy syn
 a unified review with BLOCK/CONCERN/NOTE findings, gate assessment, and revised recommendation.
 
 All reviews and synthesis committed to the branch."""
-acceptance = """
-Review convoy dispatched: READY/NOT READY
-All lens reviews committed to branch: READY/NOT READY
-Synthesis document committed: READY/NOT READY
-Gate assessment produced: READY/NOT READY
-Open questions batched for human gate: READY/NOT READY"""
+checklist = "review-convoy-complete"
 
 [[steps]]
 id = "human-gate"
 title = "Human review of {{topic}} design"
 needs = ["dispatch-reviews"]
 description = "HUMAN GATE. Present the synthesis to the human. Include: the revised recommendation, key conflicts that need resolution, and any open questions. The human may approve, request revisions (cycle back to draft), or redirect. Mail the mayor with DESIGN REVIEW summary."
-acceptance = """
-Human has reviewed synthesis: READY/NOT READY
-Direction provided (approve/revise/redirect): READY/NOT READY"""
+checklist = "human-gate-passed"
 gate = { type = "human" }
 
 [[steps]]
@@ -75,10 +57,7 @@ Deliverables:
 - Final design document on branch
 - Implementation beads decomposed from the design (if human approves proceeding)
 - Bead design field updated with final summary"""
-acceptance = """
-Design document finalized: READY/NOT READY
-Implementation beads created (if approved): READY/NOT READY
-Branch ready for merge or continued iteration: READY/NOT READY"""
+checklist = "design-finalized"
 
 [[steps]]
 id = "retro"
@@ -103,11 +82,7 @@ File ks beads for actionable findings. Link to existing ks issues if the pattern
 For each new rationalization observed, note which skill's rationalization table should be updated.
 
 Commit retro document to the branch."""
-acceptance = """
-Retro document committed: READY/NOT READY
-Findings documented: READY/NOT READY
-Beads filed for actionable items: READY/NOT READY
-Rationalizations captured: READY/NOT READY"""
+checklist = "retro-complete"
 
 [[steps]]
 id = "retro-human"
@@ -130,9 +105,7 @@ was that the changes were too minor to warrant human review. This is the canonic
 example of the pattern this gate prevents: the agent deciding which of its own oversight
 steps to skip. No matter how small or obvious the findings seem, they MUST be presented
 here before any action is taken."""
-acceptance = """
-Human has reviewed retro findings: READY/NOT READY
-Improvement direction provided: READY/NOT READY"""
+checklist = "human-gate-passed"
 gate = { type = "human" }
 
 [vars]

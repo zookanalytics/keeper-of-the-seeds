@@ -7,31 +7,21 @@ version = 1
 id = "research"
 title = "Investigate {{topic}}"
 description = "Explore the problem space. Read relevant code, docs, prior art. Understand constraints. Document findings. Do NOT propose solutions yet — understand the problem first."
-acceptance = """
-Problem space documented: READY/NOT READY
-Constraints identified: READY/NOT READY
-Relevant context captured: READY/NOT READY"""
+checklist = "research-complete"
 
 [[steps]]
 id = "propose"
 title = "Propose options for {{topic}}"
 needs = ["research"]
 description = "Write 2-3 distinct approaches. For each: describe approach, list tradeoffs, estimate effort. Include a recommended option with justification. Write findings to a design doc and update the bead design field: bd update <issue> --design \"<summary>\""
-acceptance = """
-Design doc committed: READY/NOT READY
-Options with tradeoffs documented: READY/NOT READY
-Recommendation with justification: READY/NOT READY
-Bead design field updated: READY/NOT READY"""
+checklist = "options-documented"
 
 [[steps]]
 id = "deliver"
 title = "Deliver design for review"
 needs = ["propose"]
 description = "Mail mayor with a CONSULT summary including your recommendation and key tradeoffs. Then proceed with normal gt done. Because this was slung with --no-merge, the branch persists for mayor review."
-acceptance = """
-Mayor mailed with CONSULT summary: READY/NOT READY
-gt done completed: READY/NOT READY
-Branch persists for review: READY/NOT READY"""
+checklist = "consult-delivered"
 
 [vars]
 [vars.topic]

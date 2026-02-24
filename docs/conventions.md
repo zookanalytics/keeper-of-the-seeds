@@ -48,6 +48,68 @@ Two syntaxes serve different purposes:
 - `{{var}}` — user-provided values at pour time (e.g., `{{issue}}`, `{{feature}}`)
 - `{target}` / `{target.id}` / `{step.id}` — formula-internal references in aspects and expansions
 
+## Checklists (Definition of Done)
+
+Formula steps reference external checklist files instead of inline acceptance criteria. Checklists live in `checklists/` and use binary READY/NOT READY vocabulary per criterion.
+
+### Checklist Naming
+
+- Filename: `<name>.md` (kebab-case)
+- Examples: `impl-ready.md`, `research-complete.md`, `human-gate-passed.md`
+- Formula steps reference them as `checklist = "<name>"` (without extension)
+
+### Checklist Structure
+
+```markdown
+# Checklist Title
+
+Definition of Done for [what this covers].
+
+## Gate Criteria
+
+- Criterion one: READY / NOT READY
+- Criterion two: READY / NOT READY
+```
+
+### Design Principles
+
+- **Reusable**: One checklist can serve multiple formula steps across different formulas
+- **Binary**: Every criterion is READY or NOT READY — no qualitative scoring
+- **Machine-readable**: Binary per-criterion format enables automated gate evaluation
+- **Separate from prose**: Formula step `description` explains *what to do*; checklist defines *when you're done*
+
+### Formula Step Reference
+
+```toml
+[[steps]]
+id = "implement"
+title = "Implement {{feature}}"
+description = "..."
+checklist = "impl-ready"
+```
+
+The `checklist` field replaces inline `acceptance` criteria. When a step has a `checklist`, the polecat reads the referenced file from `checklists/<name>.md` and evaluates each criterion before closing the step.
+
+### Available Checklists
+
+| Checklist | Used By |
+|-----------|---------|
+| `research-complete` | architecture/research, consult/research, design-pipeline/research |
+| `options-documented` | architecture/options, consult/propose |
+| `human-gate-passed` | architecture/direction, architecture/spec-review, architecture/retro-human, design-pipeline/human-gate, design-pipeline/retro-human |
+| `impl-ready` | standard-feature/implement, trivial/implement |
+| `tests-pass` | standard-feature/test |
+| `review-complete` | standard-feature/review |
+| `merge-ready` | standard-feature/merge, trivial/submit |
+| `retro-complete` | architecture/retro, design-pipeline/retro |
+| `spec-complete` | architecture/spec |
+| `design-drafted` | design-pipeline/draft |
+| `review-convoy-complete` | design-pipeline/dispatch-reviews |
+| `design-finalized` | design-pipeline/finalize |
+| `decomposition-complete` | architecture/decompose |
+| `verification-complete` | architecture/verify |
+| `consult-delivered` | consult/deliver |
+
 ## Skill Naming
 
 - Filename: `<name>.md` (kebab-case)
