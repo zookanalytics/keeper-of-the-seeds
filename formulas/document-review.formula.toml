@@ -27,10 +27,18 @@ BLOCK/CONCERN/NOTE classification and a binary READY/NOT READY gate assessment.
 - **user-impact**: End-user perspective and migration concerns
 - **cost**: Complexity budget and simpler alternatives
 
+## Domain-Specific Lenses (deep expertise)
+- **security-audit**: Threat modeling, OWASP, trust boundaries
+- **performance**: Latency budgets, throughput, scaling
+- **backward-compat**: API contracts, data formats, migration
+
 ## Presets
 - **minimum**: Core lenses for design advancement (feasibility, adversarial, completeness)
-- **full**: All 8 lenses for thorough review
+- **full**: All 11 lenses for thorough review
 - **risk-focused**: Risk and feasibility emphasis (feasibility, adversarial, risk, assumptions)
+- **security**: Security-focused (security-audit, adversarial, risk, feasibility)
+- **api-change**: API and compatibility focus (backward-compat, user-impact, feasibility, completeness)
+- **scaling**: Performance and scaling focus (performance, feasibility, risk, cost)
 
 ## Execution Model
 1. Each leg spawns as a separate polecat with an assigned lens
@@ -285,6 +293,82 @@ Review the document through a cost lens per skill:document-review.
 """
 
 # ============================================================================
+# DOMAIN-SPECIFIC LENSES — deep expertise for specialized reviews
+# ============================================================================
+
+[[legs]]
+id = "security-audit"
+title = "Security Audit Review"
+focus = "Threat modeling and vulnerability surface"
+description = """
+Review the document through a security-audit lens per skill:document-review.
+
+**Key questions:**
+- Does the design introduce new attack surface? Where are trust boundaries?
+- Are inputs validated at system boundaries (user input, external APIs)?
+- Does it follow OWASP Top 10 mitigations for the relevant categories?
+- Is there an authentication/authorization model? Is it least-privilege?
+- What's the threat model? Who are the adversaries and what can they do?
+- Are secrets, tokens, and credentials handled securely (no hardcoding, proper rotation)?
+
+**Look for:**
+- Missing input validation or output encoding at trust boundaries
+- Authentication/authorization bypasses or confused-deputy risks
+- Sensitive data in logs, URLs, error messages, or client-side storage
+- Missing rate limiting, CSRF protection, or injection prevention
+- Cryptographic choices that are non-standard or rolled-your-own
+- Implicit trust assumptions ("internal network is safe", "users won't do X")
+"""
+
+[[legs]]
+id = "performance"
+title = "Performance Review"
+focus = "Latency budgets, throughput, and scaling"
+description = """
+Review the document through a performance lens per skill:document-review.
+
+**Key questions:**
+- Are latency budgets defined for critical user-facing paths?
+- What's the expected load profile and how does the design scale with it?
+- Are there hot paths, tight loops, or unbounded operations?
+- What happens at 10x current traffic? At 100x?
+- Are resource limits (memory, CPU, connections, file descriptors) explicitly bounded?
+- Is there a capacity plan linking resource requirements to load?
+
+**Look for:**
+- N+1 query patterns or unbounded fan-out in data access
+- Missing pagination, caching strategy, or connection pooling
+- Synchronous operations on critical paths that could be async
+- Missing backpressure or queue depth limits
+- Latency-sensitive paths that cross network boundaries unnecessarily
+- Optimistic capacity assumptions without load testing plans
+"""
+
+[[legs]]
+id = "backward-compat"
+title = "Backward Compatibility Review"
+focus = "API contracts, data formats, and migration"
+description = """
+Review the document through a backward-compat lens per skill:document-review.
+
+**Key questions:**
+- Does this break existing API contracts (REST, gRPC, CLI, SDK)?
+- Are wire formats and data schemas backward-compatible (additive only)?
+- Is there a migration path for existing consumers? Is it documented?
+- Are deprecation timelines defined with sufficient notice periods?
+- Can old and new versions coexist during rollout (blue-green, canary)?
+- What happens to in-flight requests during deployment?
+
+**Look for:**
+- Removed or renamed fields/endpoints without deprecation period
+- Changed semantics of existing fields (silent breaking changes)
+- Missing version negotiation or feature detection
+- Database migrations that can't roll back
+- Assumptions that all consumers upgrade simultaneously
+- Missing compatibility testing strategy (contract tests, integration tests)
+"""
+
+# ============================================================================
 # PRESETS — configurable leg selection
 # ============================================================================
 
@@ -295,11 +379,23 @@ legs = ["feasibility", "adversarial", "completeness"]
 
 [presets.full]
 description = "All available review lenses — thorough review for major designs"
-legs = ["feasibility", "adversarial", "completeness", "consistency", "risk", "assumptions", "user-impact", "cost"]
+legs = ["feasibility", "adversarial", "completeness", "consistency", "risk", "assumptions", "user-impact", "cost", "security-audit", "performance", "backward-compat"]
 
 [presets.risk-focused]
 description = "Risk and feasibility emphasis — for high-stakes or uncertain designs"
 legs = ["feasibility", "adversarial", "risk", "assumptions"]
+
+[presets.security]
+description = "Security-focused review — for designs touching auth, data handling, or trust boundaries"
+legs = ["security-audit", "adversarial", "risk", "feasibility"]
+
+[presets.api-change]
+description = "API and compatibility focus — for designs changing public interfaces or data formats"
+legs = ["backward-compat", "user-impact", "feasibility", "completeness"]
+
+[presets.scaling]
+description = "Performance and scaling focus — for designs with significant load or latency requirements"
+legs = ["performance", "feasibility", "risk", "cost"]
 
 # ============================================================================
 # SYNTHESIS — combines all leg outputs
@@ -356,4 +452,4 @@ Deduplicate findings across lenses (note which lenses found them).
 Prioritize by severity (BLOCK > CONCERN > NOTE).
 Batch all questions for the human gate.
 """
-depends_on = ["feasibility", "adversarial", "completeness", "consistency", "risk", "assumptions", "user-impact", "cost"]
+depends_on = ["feasibility", "adversarial", "completeness", "consistency", "risk", "assumptions", "user-impact", "cost", "security-audit", "performance", "backward-compat"]

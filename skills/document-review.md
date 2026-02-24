@@ -36,6 +36,16 @@ Each review should declare its lens. The lens focuses evaluation on specific con
 | **user-impact** | End-user perspective | How does this affect users? What's the migration story? Are there UX implications not addressed? |
 | **cost** | Resource and complexity | Is this the simplest approach that works? What's the maintenance burden? Could a simpler alternative achieve 80% of the value? |
 
+### Domain-Specific Lenses
+
+These lenses encode deeper domain expertise. Use them when the document touches their domain, or when dispatched as part of a domain-focused review convoy.
+
+| Lens | Focus | Key Questions |
+|------|-------|---------------|
+| **security-audit** | Threat modeling and vulnerability surface | Does the design introduce new attack surface? Are trust boundaries identified? Are inputs validated at system boundaries? Does it follow OWASP Top 10 mitigations? Is there an authentication/authorization model? What's the threat model? |
+| **performance** | Latency budgets, throughput, and scaling | Are latency budgets defined for critical paths? What's the expected load and how does it scale? Are there hot paths or bottlenecks? What happens under 10x traffic? Are resource limits (memory, CPU, connections) bounded? Is there a capacity plan? |
+| **backward-compat** | API contracts, data formats, and migration | Does this break existing API contracts? Are wire formats and data schemas backward-compatible? Is there a migration path for existing consumers? Are deprecation timelines defined? Can old and new versions coexist during rollout? |
+
 The bead description or convoy dispatch specifies which lens to apply. If no lens is specified, default to **completeness + feasibility**.
 
 ## How to Execute
