@@ -1,2 +1,6 @@
 .runtime/
 .logs/
+.beads/
+
+# Gas Town (added by gt)
+.claude/commands/
