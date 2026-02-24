@@ -1,0 +1,357 @@
+# Document Review Convoy Formula
+#
+# Parallel multi-lens document review. Spawns reviewers in parallel,
+# each applying a different review lens per skill:document-review.
+# Results synthesized into a unified review with gate assessment.
+#
+# Standalone usage:
+#   gt formula run document-review --topic="Notification redesign" --document="docs/designs/ks-abc-notification.md"
+#
+# Composed into a workflow via compose.expand:
+#   [[compose.expand]]
+#   target = "dispatch-reviews"
+#   with = "document-review"
+
+description = """
+Parallel multi-lens document review convoy. Each leg applies skill:document-review
+with a different review lens. Findings are synthesized into a unified review with
+BLOCK/CONCERN/NOTE classification and a binary READY/NOT READY gate assessment.
+
+## Legs (parallel execution)
+- **feasibility**: Technical viability and implementation risk
+- **adversarial**: Red-team / devil's advocate challenge
+- **completeness**: Coverage gaps and missing requirements
+- **consistency**: Internal coherence and contradictions
+- **risk**: Failure modes and mitigation gaps
+- **assumptions**: Hidden dependencies and load-bearing assumptions
+- **user-impact**: End-user perspective and migration concerns
+- **cost**: Complexity budget and simpler alternatives
+
+## Presets
+- **minimum**: Core lenses for design advancement (feasibility, adversarial, completeness)
+- **full**: All 8 lenses for thorough review
+- **risk-focused**: Risk and feasibility emphasis (feasibility, adversarial, risk, assumptions)
+
+## Execution Model
+1. Each leg spawns as a separate polecat with an assigned lens
+2. Polecats work in parallel per skill:document-review
+3. Each commits their review to the branch
+4. Synthesis step combines all findings into unified gate assessment
+"""
+formula = "document-review"
+type = "convoy"
+version = 1
+
+[inputs]
+[inputs.topic]
+description = "Human-readable description of what's being reviewed"
+type = "string"
+required = true
+
+[inputs.document]
+description = "Path to the document under review (relative to branch root)"
+type = "string"
+required = true
+
+[inputs.parent_bead]
+description = "Parent bead ID for creating review child beads"
+type = "string"
+required = true
+
+[prompts]
+base = """
+# Document Review Assignment
+
+You are a specialized document reviewer participating in a review convoy.
+
+## Context
+- **Topic**: {{.topic}}
+- **Document**: {{.document}}
+- **Your lens**: {{.leg.title}}
+- **Leg ID**: {{.leg.id}}
+
+## Your Task
+Review the document through the **{{.leg.focus}}** lens per **skill:document-review**.
+
+{{.leg.description}}
+
+## Output Requirements
+Write your review to: **{{.output_path}}**
+
+Follow the output format defined in skill:document-review:
+
+```
+## Review: {{.topic}}
+Lens: {{.leg.focus}}
+Reviewer: {{.leg.id}}
+
+### Gate Assessment
+[For each lens key question, provide a binary verdict:]
+[Question]: READY/NOT READY
+
+Overall: READY / NOT READY
+
+### BLOCK
+- [Section]: [Finding. Why it blocks. Suggested resolution.]
+
+### CONCERN
+- [Section]: [Finding. Why it matters. What would resolve it.]
+
+### NOTE
+- [Section]: [Observation. Optional suggestion.]
+
+### Coverage
+Sections reviewed: [list]
+Lens questions applied: [list]
+```
+
+Read the FULL document before evaluating. Do not start writing findings after
+the first section. Classify every finding as BLOCK, CONCERN, or NOTE.
+"""
+
+[output]
+directory = "docs/reviews/{{.review_id}}"
+leg_pattern = "{{.leg.id}}-review.md"
+synthesis = "review-synthesis.md"
+
+# ============================================================================
+# CORE LENSES — included in minimum preset
+# ============================================================================
+
+[[legs]]
+id = "feasibility"
+title = "Feasibility Review"
+focus = "Technical viability and implementation risk"
+description = """
+Review the document through a feasibility lens per skill:document-review.
+
+**Key questions:**
+- Can this actually be built with available resources and constraints?
+- What's the hardest part? What could go wrong during implementation?
+- Are the effort estimates realistic? What's being underestimated?
+- Are there technical dependencies that haven't been validated?
+
+**Look for:**
+- Proposals that assume capabilities not yet proven
+- Optimistic timelines missing integration complexity
+- Unstated technical prerequisites
+- Architectural decisions that constrain future options
+"""
+
+[[legs]]
+id = "adversarial"
+title = "Adversarial Review"
+focus = "Red-team / devil's advocate challenge"
+description = """
+Review the document through an adversarial lens per skill:document-review.
+
+**Key questions:**
+- What's the strongest argument against this approach?
+- What would a skeptic challenge? Where is the reasoning weakest?
+- What failure modes are not discussed?
+- If this design is wrong, how would we know?
+
+**Look for:**
+- Confirmation bias in the analysis (only supporting evidence cited)
+- Dismissed alternatives that deserve more consideration
+- Assumptions presented as facts
+- Missing "what if we're wrong about X?" analysis
+"""
+
+[[legs]]
+id = "completeness"
+title = "Completeness Review"
+focus = "Coverage gaps and missing requirements"
+description = """
+Review the document through a completeness lens per skill:document-review.
+
+**Key questions:**
+- Does it address every stated requirement? What's missing?
+- Are edge cases considered? What about error paths?
+- Is the scope clearly bounded? What's explicitly out of scope?
+- Are success criteria defined and measurable?
+
+**Look for:**
+- Requirements mentioned but not addressed in the design
+- Missing sections expected for this document type
+- Undefined behavior in edge cases
+- Vague deliverables without acceptance criteria
+"""
+
+# ============================================================================
+# EXTENDED LENSES — included in full preset
+# ============================================================================
+
+[[legs]]
+id = "consistency"
+title = "Consistency Review"
+focus = "Internal coherence and contradictions"
+description = """
+Review the document through a consistency lens per skill:document-review.
+
+**Key questions:**
+- Do sections contradict each other?
+- Do assumptions in one section hold in another?
+- Does terminology stay consistent throughout?
+- Do the options analysis and recommendation align?
+
+**Look for:**
+- Section 3 assuming X while Section 5 assumes not-X
+- Terminology drift (same concept, different names)
+- Recommendation that doesn't follow from the analysis
+- Constraints stated early but violated later
+"""
+
+[[legs]]
+id = "risk"
+title = "Risk Review"
+focus = "Failure modes and mitigation gaps"
+description = """
+Review the document through a risk lens per skill:document-review.
+
+**Key questions:**
+- What are the biggest risks? Are they identified?
+- What happens if key assumptions are wrong?
+- What's the blast radius of failure?
+- Are mitigations proportional to the risks?
+
+**Look for:**
+- Unidentified single points of failure
+- Missing rollback or recovery plans
+- Risks acknowledged but not mitigated
+- Cascading failure scenarios not considered
+"""
+
+[[legs]]
+id = "assumptions"
+title = "Assumptions Review"
+focus = "Hidden dependencies and load-bearing assumptions"
+description = """
+Review the document through an assumptions lens per skill:document-review.
+
+**Key questions:**
+- What's taken for granted that should be stated explicitly?
+- Which assumptions are load-bearing (design fails if wrong)?
+- Have load-bearing assumptions been validated?
+- What breaks if external dependencies change?
+
+**Look for:**
+- Implicit assumptions buried in prose rather than called out
+- "Obviously" or "clearly" signaling unexamined assumptions
+- Dependencies on external systems/APIs/behaviors not under our control
+- Assumptions that were true historically but may not hold
+"""
+
+[[legs]]
+id = "user-impact"
+title = "User Impact Review"
+focus = "End-user perspective and migration concerns"
+description = """
+Review the document through a user-impact lens per skill:document-review.
+
+**Key questions:**
+- How does this affect end users? Is the impact assessed?
+- What's the migration story? Is there a transition plan?
+- Are there UX implications not addressed?
+- Does this create new failure modes visible to users?
+
+**Look for:**
+- Changes that affect user workflows without migration guidance
+- Breaking changes presented as non-breaking
+- Missing user-facing documentation or communication plan
+- Performance regressions visible to users
+"""
+
+[[legs]]
+id = "cost"
+title = "Cost Review"
+focus = "Complexity budget and simpler alternatives"
+description = """
+Review the document through a cost lens per skill:document-review.
+
+**Key questions:**
+- Is this the simplest approach that works?
+- What's the ongoing maintenance burden?
+- Could a simpler alternative achieve 80% of the value?
+- What's the total cost of ownership (build + maintain + operate)?
+
+**Look for:**
+- Over-engineering for hypothetical future requirements
+- Complex solutions where simple ones would suffice
+- Hidden operational costs (monitoring, on-call, upgrades)
+- Premature abstraction or generalization
+"""
+
+# ============================================================================
+# PRESETS — configurable leg selection
+# ============================================================================
+
+[presets]
+[presets.minimum]
+description = "Core lenses for design advancement — fast, focused on blockers"
+legs = ["feasibility", "adversarial", "completeness"]
+
+[presets.full]
+description = "All available review lenses — thorough review for major designs"
+legs = ["feasibility", "adversarial", "completeness", "consistency", "risk", "assumptions", "user-impact", "cost"]
+
+[presets.risk-focused]
+description = "Risk and feasibility emphasis — for high-stakes or uncertain designs"
+legs = ["feasibility", "adversarial", "risk", "assumptions"]
+
+# ============================================================================
+# SYNTHESIS — combines all leg outputs
+# ============================================================================
+
+[synthesis]
+title = "Review Synthesis"
+description = """
+Combine all lens reviews into a unified review document.
+
+**Your input:**
+All lens reviews from: {{.output.directory}}/
+
+**Your output:**
+A synthesized review at: {{.output.directory}}/{{.output.synthesis}}
+
+**Structure:**
+```markdown
+# Review Synthesis: {{.topic}}
+
+## Gate Assessment
+[Aggregate READY/NOT READY across all lenses]
+Overall: READY / NOT READY
+
+## Consensus
+What all reviewers agree on. Areas of convergent concern or approval.
+
+## Conflicts
+Where reviewers disagree, with both sides stated. Which lens found what.
+
+## Blockers
+All BLOCK findings across lenses, deduplicated. Each with:
+- Source lens
+- Section reference
+- Finding and suggested resolution
+
+## Concerns
+All CONCERN findings, grouped by theme. Note which lenses surfaced each.
+
+## Open Questions
+Questions requiring human judgment. Batched for the human gate —
+do not present them piecemeal.
+
+## Revised Recommendation
+If the document contains a recommendation, state whether the review
+findings support it, challenge it, or require modifications. Be specific
+about what should change.
+
+## Appendix: Per-Lens Summaries
+[Brief summary of each lens's findings with link to full review]
+```
+
+Deduplicate findings across lenses (note which lenses found them).
+Prioritize by severity (BLOCK > CONCERN > NOTE).
+Batch all questions for the human gate.
+"""
+depends_on = ["feasibility", "adversarial", "completeness", "consistency", "risk", "assumptions", "user-impact", "cost"]
