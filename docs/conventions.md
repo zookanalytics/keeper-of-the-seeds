@@ -397,6 +397,88 @@ principles:
 
 This convention applies whenever a formula step dispatches multiple polecats to work on the same artifact from different angles — review convoys, parallel analysis, multi-perspective evaluation. It does NOT apply to standard single-polecat dispatch (standard-feature, trivial), where the bead description alone is sufficient.
 
+## Multi-Model Convoy Dispatch
+
+Review convoy legs can target different model backends using `gt sling --agent`. Different models catch different issue classes — cross-model disagreements are high-signal findings that indicate areas needing human judgment.
+
+### The `agent` Field
+
+Each `[[legs]]` entry in a convoy formula can specify an optional `agent` field:
+
+```toml
+[[legs]]
+id = "feasibility"
+title = "Feasibility Review"
+focus = "Technical viability and implementation risk"
+agent = "claude"  # Dispatched via: gt sling <bead> <rig> --agent claude
+```
+
+When the dispatcher creates child beads for a convoy, it reads the `agent` field and passes it as `--agent` to `gt sling`. Legs without an `agent` field use the default runtime.
+
+### Multi-Model Presets
+
+Presets can include an `agents` table that maps leg IDs to model backends:
+
+```toml
+[presets.multi-model-minimum]
+description = "Core lenses with cross-model diversity"
+legs = ["feasibility", "adversarial", "completeness"]
+[presets.multi-model-minimum.agents]
+feasibility = "claude"
+adversarial = "gemini"
+completeness = "convex"
+```
+
+When a preset includes `agents`, the dispatcher overrides each leg's `agent` field with the preset value. This allows the same legs to be dispatched to different models depending on the preset selected.
+
+### Available Agents
+
+| Agent | Backend | Notes |
+|-------|---------|-------|
+| `claude` | Claude (Anthropic) | Default runtime for Gas Town polecats |
+| `gemini` | Gemini (Google) | Alternative model backend |
+| `convex` | Convex | Alternative model backend |
+
+Custom aliases can be defined in rig configuration. The `--agent` flag accepts any alias known to `gt sling`.
+
+### Why Multi-Model Review
+
+Different models have different blind spots. A finding that Claude misses, Gemini may catch — and vice versa. The synthesis step surfaces these cross-model disagreements as high-signal findings:
+
+- **Gate divergence**: One model says READY, another says NOT READY on the same criterion
+- **Severity disagreement**: Same finding classified as BLOCK by one model, CONCERN by another
+- **Unique findings**: Issues caught by only one model that others missed entirely
+
+These disagreements are more valuable than agreement — agreement confirms, disagreement reveals ambiguity requiring human judgment.
+
+### Dispatch Example
+
+```bash
+# Single-model convoy (default behavior, all legs use claude):
+gt sling document-review --on ks-abc --preset minimum keeper
+
+# Multi-model convoy (each leg uses a different model):
+gt sling document-review --on ks-abc --preset multi-model-minimum keeper
+
+# Manual per-leg override:
+gt sling ks-abc-feasibility keeper --agent claude
+gt sling ks-abc-adversarial keeper --agent gemini
+gt sling ks-abc-completeness keeper --agent convex
+```
+
+### Review Output
+
+When multi-model dispatch is used, each reviewer includes its model in the review header:
+
+```markdown
+## Review: Widget Cache Design
+Lens: Technical viability and implementation risk
+Reviewer: feasibility
+Model: claude
+```
+
+The synthesis step uses the model information to produce the Cross-Model Disagreement Analysis section.
+
 ## Hook Naming
 
 - Filename: descriptive of what it enforces (kebab-case)

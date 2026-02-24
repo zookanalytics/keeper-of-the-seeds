@@ -39,12 +39,26 @@ BLOCK/CONCERN/NOTE classification and a binary READY/NOT READY gate assessment.
 - **security**: Security-focused (security-audit, adversarial, risk, feasibility)
 - **api-change**: API and compatibility focus (backward-compat, user-impact, feasibility, completeness)
 - **scaling**: Performance and scaling focus (performance, feasibility, risk, cost)
+- **multi-model-minimum**: Core lenses with cross-model diversity (Claude, Gemini, Convex)
+- **multi-model-full**: All lenses distributed across three model backends
+
+## Multi-Model Adversarial Review
+Legs can specify an `agent` field to override the model backend. Different models
+catch different issue classes — cross-model disagreements are high-signal findings.
+The dispatcher uses `gt sling <bead> <rig> --agent <agent>` per leg.
+
+Available agents: claude, gemini, convex (or custom aliases defined in rig config).
+
+When multi-model presets are used, the synthesis step includes a Cross-Model
+Disagreement Analysis section that highlights where models diverge.
 
 ## Execution Model
 1. Each leg spawns as a separate polecat with an assigned lens
 2. Polecats work in parallel per skill:document-review
-3. Each commits their review to the branch
-4. Synthesis step combines all findings into unified gate assessment
+3. If a leg specifies `agent`, the dispatcher uses `--agent` to select the model
+4. Each commits their review to the branch
+5. Synthesis step combines all findings into unified gate assessment
+6. When multiple models are used, synthesis surfaces cross-model disagreements
 """
 formula = "document-review"
 # NOTE: intended type is "convoy" (parallel dispatch) — using "workflow" until
@@ -79,6 +93,7 @@ You are a specialized document reviewer participating in a review convoy.
 - **Document**: {{.document}}
 - **Your lens**: {{.leg.title}}
 - **Leg ID**: {{.leg.id}}
+- **Model**: {{.leg.agent | default "default"}}
 
 ## Your Task
 Review the document through the **{{.leg.focus}}** lens per **skill:document-review**.
@@ -94,6 +109,7 @@ Follow the output format defined in skill:document-review:
 ## Review: {{.topic}}
 Lens: {{.leg.focus}}
 Reviewer: {{.leg.id}}
+Model: {{.leg.agent | default "default"}}
 
 ### Gate Assessment
 [For each lens key question, provide a binary verdict:]
@@ -132,6 +148,7 @@ synthesis = "review-synthesis.md"
 id = "feasibility"
 title = "Feasibility Review"
 focus = "Technical viability and implementation risk"
+# agent = "claude"  # Optional: override model backend (used by multi-model presets)
 description = """
 Review the document through a feasibility lens per skill:document-review.
 
@@ -152,6 +169,7 @@ Review the document through a feasibility lens per skill:document-review.
 id = "adversarial"
 title = "Adversarial Review"
 focus = "Red-team / devil's advocate challenge"
+# agent = "gemini"  # Optional: override model backend (used by multi-model presets)
 description = """
 Review the document through an adversarial lens per skill:document-review.
 
@@ -172,6 +190,7 @@ Review the document through an adversarial lens per skill:document-review.
 id = "completeness"
 title = "Completeness Review"
 focus = "Coverage gaps and missing requirements"
+# agent = "convex"  # Optional: override model backend (used by multi-model presets)
 description = """
 Review the document through a completeness lens per skill:document-review.
 
@@ -397,6 +416,27 @@ legs = ["backward-compat", "user-impact", "feasibility", "completeness"]
 description = "Performance and scaling focus — for designs with significant load or latency requirements"
 legs = ["performance", "feasibility", "risk", "cost"]
 
+[presets.multi-model-minimum]
+description = "Core lenses with cross-model diversity — each lens uses a different model backend"
+legs = ["feasibility", "adversarial", "completeness"]
+[presets.multi-model-minimum.agents]
+feasibility = "claude"
+adversarial = "gemini"
+completeness = "convex"
+
+[presets.multi-model-full]
+description = "All lenses distributed across three model backends for maximum diversity"
+legs = ["feasibility", "adversarial", "completeness", "consistency", "risk", "assumptions", "user-impact", "cost"]
+[presets.multi-model-full.agents]
+feasibility = "claude"
+adversarial = "gemini"
+completeness = "convex"
+consistency = "claude"
+risk = "gemini"
+assumptions = "convex"
+user-impact = "claude"
+cost = "gemini"
+
 # ============================================================================
 # SYNTHESIS — combines all leg outputs
 # ============================================================================
@@ -420,6 +460,29 @@ A synthesized review at: {{.output.directory}}/{{.output.synthesis}}
 [Aggregate READY/NOT READY across all lenses]
 Overall: READY / NOT READY
 
+## Cross-Model Disagreement Analysis
+[INCLUDE THIS SECTION ONLY when multiple model backends were used]
+
+High-signal findings where different models diverged:
+
+### Gate Divergence
+[Cases where one model says READY but another says NOT READY on the same
+criterion or section. List each divergence with both models' reasoning.]
+
+### Severity Disagreement
+[Cases where models classify the same finding at different severity levels
+(e.g., one model flags BLOCK, another flags CONCERN or NOTE). Include both
+assessments — the disagreement itself is the signal.]
+
+### Unique Findings
+[Findings surfaced by only one model that others missed entirely. Note which
+model found it and which models did not. These are blind-spot indicators.]
+
+### Interpretation
+[What do the disagreements tell us? Are they about different risk tolerance,
+different domain expertise, or genuinely ambiguous areas? Disagreements on
+the same evidence suggest the question needs human judgment.]
+
 ## Consensus
 What all reviewers agree on. Areas of convergent concern or approval.
 
@@ -428,7 +491,7 @@ Where reviewers disagree, with both sides stated. Which lens found what.
 
 ## Blockers
 All BLOCK findings across lenses, deduplicated. Each with:
-- Source lens
+- Source lens (and model, if multi-model)
 - Section reference
 - Finding and suggested resolution
 
@@ -446,10 +509,16 @@ about what should change.
 
 ## Appendix: Per-Lens Summaries
 [Brief summary of each lens's findings with link to full review]
+[Include model backend for each lens when multi-model preset was used]
 ```
 
 Deduplicate findings across lenses (note which lenses found them).
 Prioritize by severity (BLOCK > CONCERN > NOTE).
 Batch all questions for the human gate.
+
+**Cross-model disagreement priority:** When multiple models are used,
+disagreements between models on the SAME finding are higher priority than
+agreement. Agreement confirms the finding; disagreement indicates areas
+where human judgment is needed. Surface disagreements prominently.
 """
 depends_on = ["feasibility", "adversarial", "completeness", "consistency", "risk", "assumptions", "user-impact", "cost", "security-audit", "performance", "backward-compat"]

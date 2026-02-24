@@ -9,3 +9,4 @@ Definition of Done for document review convoy steps.
 - Synthesis document committed: READY / NOT READY
 - Gate assessment produced: READY / NOT READY
 - Open questions batched for human gate: READY / NOT READY
+- Cross-model disagreement analysis included (if multi-model preset used): READY / NOT READY / N/A

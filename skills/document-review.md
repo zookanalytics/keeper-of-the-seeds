@@ -71,6 +71,7 @@ The bead description or convoy dispatch specifies which lens to apply. If no len
 ## Review: [Document Title]
 Lens: [declared lens]
 Reviewer: [agent/polecat name]
+Model: [model backend, if specified in convoy dispatch — omit if default]
 
 ### Gate Assessment
 [For each lens key question, provide a binary verdict:]
