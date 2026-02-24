@@ -109,6 +109,8 @@ The `checklist` field replaces inline `acceptance` criteria. When a step has a `
 | `decomposition-complete` | architecture/decompose |
 | `verification-complete` | architecture/verify |
 | `consult-delivered` | consult/deliver |
+| `acceptance-tests-written` | tea aspect: before implement |
+| `acceptance-traceability-verified` | tea aspect: after test |
 
 ## Skill Naming
 

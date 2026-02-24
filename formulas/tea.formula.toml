@@ -1,0 +1,30 @@
+description = "Cross-cutting test-first concern (ATDD/TEA). Weaves acceptance tests before implementation and traceability verification after testing."
+formula = "tea"
+type = "aspect"
+version = 1
+
+[[advice]]
+target = "implement"
+[advice.around]
+
+[[advice.around.before]]
+id = "{step.id}-acceptance-tests"
+title = "Write failing acceptance tests before {step.id}"
+description = "Per skill:acceptance-testing, extract acceptance criteria from the bead spec and write executable tests encoding each criterion. Run the tests — they MUST fail (red). If any test passes before implementation, it is not testing new behavior. Commit the failing tests before proceeding to implementation."
+checklist = "acceptance-tests-written"
+
+[[advice]]
+target = "test"
+[advice.around]
+
+[[advice.around.after]]
+id = "{step.id}-traceability-check"
+title = "Verify acceptance traceability after {step.id}"
+description = "Verify every acceptance criterion from the bead spec maps to at least one test, and all acceptance tests now pass (green). Produce a traceability summary: each criterion and its covering test(s). Any uncovered criterion is a BLOCK — write the missing test and re-run before closing."
+checklist = "acceptance-traceability-verified"
+
+[[pointcuts]]
+glob = "implement"
+
+[[pointcuts]]
+glob = "test"
