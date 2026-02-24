@@ -100,7 +100,7 @@ The `checklist` field replaces inline `acceptance` criteria. When a step has a `
 | `impl-ready` | standard-feature/implement, trivial/implement |
 | `tests-pass` | standard-feature/test |
 | `review-complete` | standard-feature/review |
-| `merge-ready` | standard-feature/merge, trivial/submit |
+| `merge-ready` | standard-feature/merge, trivial/submit, shiny/submit |
 | `retro-complete` | architecture/retro, design-pipeline/retro |
 | `spec-complete` | architecture/spec |
 | `design-drafted` | design-pipeline/draft |
@@ -550,7 +550,7 @@ Follow conventional commits scoped to the pillar:
 
 ## Squash-Merge Convention
 
-All merges to `main` use GitHub's squash-merge. This produces one commit per bead on main, making `git log --oneline` a readable changelog.
+All merges to `main` use GitHub's squash-merge via PR. See **skill:pr-merge** for the full procedure. This produces one commit per bead on main, making `git log --oneline` a readable changelog.
 
 ### Squash Commit Format
 
@@ -563,6 +563,22 @@ Extended description from PR body.
 Example:
 ```
 feat(formulas): add architecture-decision workflow (ks-abc12)
+```
+
+### PR Body Template
+
+```
+## Summary
+<1-3 sentence description of what this change does and why>
+
+## Bead
+`<bead-id>`: <bead title>
+
+## Changes
+<bullet list of key changes>
+
+## Notes
+<implementation notes, decisions made, anything reviewers should know>
 ```
 
 ### Why Squash-Merge

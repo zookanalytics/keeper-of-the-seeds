@@ -41,7 +41,7 @@ checklist = "tests-pass"
 id = "submit"
 title = "Submit for merge"
 needs = ["test"]
-description = "Submit for merge. Final check: git status clean, clear commit message, code pushed to feature branch. Follow your role's git workflow for landing code."
+description = "Submit per skill:pr-merge. Push branch, open PR via gh CLI with title 'type(scope): summary (bead-id)', wait for CI, squash-merge. Final check: git status clean before push."
 checklist = "merge-ready"
 
 [vars]

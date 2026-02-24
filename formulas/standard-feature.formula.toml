@@ -34,7 +34,7 @@ gate = { type = "human" }
 [[steps]]
 id = "merge"
 title = "Merge"
-description = "Merge the approved PR. Verify CI passes on the target branch post-merge."
+description = "Merge per skill:pr-merge. Push branch, open PR via gh CLI with title 'type(scope): summary (bead-id)', wait for CI, squash-merge. Verify merge commit on main."
 needs = ["review"]
 checklist = "merge-ready"
 

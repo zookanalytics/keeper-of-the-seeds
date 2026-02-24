@@ -12,7 +12,7 @@ checklist = "impl-ready"
 [[steps]]
 id = "submit"
 title = "Submit for merge"
-description = "Commit with clear message. Push to feature branch. Triage level 'auto' means CI is the gate, not human review."
+description = "Submit per skill:pr-merge. Push branch, open PR via gh CLI with title 'type(scope): summary (bead-id)', wait for CI, squash-merge. Triage level 'auto' means CI is the gate, not human review."
 needs = ["implement"]
 checklist = "merge-ready"
 
