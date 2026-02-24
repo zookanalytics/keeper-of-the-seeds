@@ -4,8 +4,15 @@ type = "workflow"
 version = 1
 
 [[steps]]
+id = "spec-check"
+title = "Verify understanding of {{feature}}"
+description = "Lightweight requirement checkpoint before implementation. Re-read the bead spec and confirm: What exactly needs to change? What files are involved? What does 'done' look like? If requirements are ambiguous or missing, escalate before writing code. This is a quick sanity check, not a design phase — if you need a design step, use the shiny formula instead."
+checklist = "spec-understood"
+
+[[steps]]
 id = "implement"
 title = "Implement {{feature}}"
+needs = ["spec-check"]
 description = "Implement the feature per skill:implementation. Read the bead spec, understand scope, write the code. Keep changes focused — don't gold-plate."
 checklist = "impl-ready"
 
