@@ -66,6 +66,12 @@ description = """Analyze this workflow execution and produce a retro document. R
 5. Cycle efficiency — where did the human wait unnecessarily? Where could polecats have worked in parallel?
 6. Skill gaps — did any step lack a skill that would have helped?
 
+⚠️ WARNING: This retro step produces findings. It does NOT authorize acting on them.
+All findings MUST be presented at the retro-human gate before implementation.
+Do not skip ahead to implementing 'obvious' fixes — that is the agent deciding
+which of its own oversight steps to skip, which is the exact failure mode human
+gates exist to prevent. See retro-human step.
+
 File ks beads for actionable findings. Link to existing ks issues if the pattern is already tracked.
 Commit retro document to the branch."""
 acceptance = "Retro document committed with findings, ks beads filed for actionable items, rationalizations captured"
@@ -81,7 +87,13 @@ description = """HUMAN GATE. Present the retro findings to the human. Include:
 3. New rationalizations to add to skill tables
 4. Beads filed and their priority
 
-Human decides which improvements to pursue. Approved improvements become keeper beads."""
+Human decides which improvements to pursue. Approved improvements become keeper beads.
+
+⚠️ KNOWN RATIONALIZATION: 'The fixes are small and obvious, no need for human review.'
+This gate exists precisely because agents cannot be trusted to judge which oversight
+steps are safe to skip. No matter how small or obvious the findings seem, they MUST
+be presented here before any action is taken. The agent deciding to skip its own
+oversight is the canonical failure mode this gate prevents."""
 acceptance = "Human has reviewed retro findings and directed which improvements to pursue"
 gate = { type = "human" }
 
