@@ -4,3 +4,5 @@
 
 # Gas Town (added by gt)
 .claude/commands/
+.gemini/commands/
+.gemini/skills/
