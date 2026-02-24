@@ -129,30 +129,41 @@ The canonical skill source is always `skills/<name>.md`. Model-specific adaptati
 | Claude | `.claude/commands/<name>.md` | Markdown (symlink to `skills/`) | `gt sling` (symlinks) |
 | Gemini | `.gemini/commands/<name>.toml` | TOML (`description` + `prompt`) | `scripts/build-gemini-skills.sh` |
 | Gemini (agent skills) | `.gemini/skills/<name>/SKILL.md` | Markdown (YAML frontmatter) | `scripts/build-gemini-skills.sh` |
+| Codex | `.agents/skills/<name>/SKILL.md` | Markdown (YAML frontmatter) | `scripts/build-codex-skills.sh` |
 
 **Gemini has two resolution mechanisms:**
 - **Commands** (`.gemini/commands/`): User-invoked slash commands (`/research`). TOML format with `description` and `prompt` fields. Equivalent to Claude's `.claude/commands/`.
 - **Agent Skills** (`.gemini/skills/`): Model-invoked skills. Gemini discovers skills at session start, then activates them automatically when it detects a matching task (with user consent). More powerful than commands for autonomous workflows.
 
-**Build step:** Run `scripts/build-gemini-skills.sh` to regenerate Gemini skill files from canonical sources. The script:
-- Parses YAML frontmatter (`name`, `description`, `expert`) from each `skills/*.md`
-- Generates `.gemini/commands/<name>.toml` with the `expert` context folded into the prompt body
-- Generates `.gemini/skills/<name>/SKILL.md` with the `expert` context as a blockquote
-- Generates a `handoff.toml` command using Gemini's `{{args}}` placeholder (vs Claude's `$ARGUMENTS`)
+**Codex uses the open agent skills standard:**
+- **Skills** (`.agents/skills/<name>/SKILL.md`): Codex discovers skills at session start from `.agents/skills/` in the repo root. Skills activate implicitly (Codex auto-selects when a task matches the description) or explicitly (user invokes via `$` mention). No slash commands — Codex does not support the `/command` pattern.
+
+**Build steps:**
+- **Gemini:** Run `scripts/build-gemini-skills.sh` to regenerate Gemini skill files from canonical sources. The script:
+  - Parses YAML frontmatter (`name`, `description`, `expert`) from each `skills/*.md`
+  - Generates `.gemini/commands/<name>.toml` with the `expert` context folded into the prompt body
+  - Generates `.gemini/skills/<name>/SKILL.md` with the `expert` context as a blockquote
+  - Generates a `handoff.toml` command using Gemini's `{{args}}` placeholder (vs Claude's `$ARGUMENTS`)
+
+- **Codex:** Run `scripts/build-codex-skills.sh` to regenerate Codex skill files from canonical sources. The script:
+  - Parses YAML frontmatter (`name`, `description`, `expert`) from each `skills/*.md`
+  - Generates `.agents/skills/<name>/SKILL.md` with the `expert` context as a blockquote
+  - Generates a `handoff` skill with imperative instructions (no argument placeholder — Codex skills don't parameterize the same way)
 
 **Generated files are gitignored** — they're runtime artifacts, like `.claude/commands/`. Regenerate after modifying any `skills/*.md` file.
 
-**Formula step consistency:** Formula steps reference skills as `/<name>` or `skill:<name>`. This is agent-runtime-agnostic — each runtime resolves the reference through its own path. No formula changes are needed when switching between Claude and Gemini backends.
+**Formula step consistency:** Formula steps reference skills as `/<name>` or `skill:<name>`. This is agent-runtime-agnostic — each runtime resolves the reference through its own path. No formula changes are needed when switching between Claude, Gemini, and Codex backends.
 
 **Key format differences:**
 
-| Feature | Claude | Gemini |
-|---------|--------|--------|
-| Argument placeholder | `$ARGUMENTS` | `{{args}}` |
-| File format | Markdown | TOML (commands), Markdown (skills) |
-| Activation model | User-invoked slash commands | User-invoked commands + model-invoked skills |
-| Shell execution | Not supported | `!{...}` syntax in commands |
-| File injection | Not supported | `@{path}` syntax in commands |
+| Feature | Claude | Gemini | Codex |
+|---------|--------|--------|-------|
+| Argument placeholder | `$ARGUMENTS` | `{{args}}` | N/A (inline instructions) |
+| File format | Markdown | TOML (commands), Markdown (skills) | Markdown (skills only) |
+| Activation model | User-invoked slash commands | User-invoked commands + model-invoked skills | Implicit (description match) + explicit (`$` mention) |
+| Shell execution | Not supported | `!{...}` syntax in commands | Via sandbox (task execution) |
+| File injection | Not supported | `@{path}` syntax in commands | Not supported |
+| Project instructions | `CLAUDE.md` | N/A | `AGENTS.md` |
 
 ### Skill Frontmatter
 
@@ -474,6 +485,7 @@ When a preset includes `agents`, the dispatcher overrides each leg's `agent` fie
 |-------|---------|-------|
 | `claude` | Claude (Anthropic) | Default runtime for Gas Town polecats |
 | `gemini` | Gemini (Google) | Alternative model backend |
+| `codex` | Codex (OpenAI) | Alternative model backend |
 | `convex` | Convex | Alternative model backend |
 
 Custom aliases can be defined in rig configuration. The `--agent` flag accepts any alias known to `gt sling`.
