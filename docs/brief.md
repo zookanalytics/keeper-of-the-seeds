@@ -24,27 +24,31 @@ These three gaps — workflow definition, execution knowledge, and enforcement �
 
 ## Core Architecture
 
-### The Three Pillars
+### The Pillars
 
 ```
-keeper-of-the-seeds/
-├── formulas/        ← WHAT happens and WHEN (workflow templates)
-├── skills/          ← HOW to do each thing well (execution knowledge)
-├── hooks/           ← ENFORCEMENT that both are actually followed
-├── tests/           ← Validation that skills produce better outcomes
+keeper/
+├── formulas/        ← WHAT happens and WHEN (8 workflow templates)
+├── skills/          ← HOW to do each thing well (7 execution skills)
+├── checklists/      ← WHEN you're done (17 binary gate criteria)
+├── hooks/           ← ENFORCEMENT that process is actually followed
+├── .claude/commands/← Skill symlinks enabling /slash-command invocation
+├── tests/           ← Validation scenarios for skills
 ├── docs/            ← Deep reference (this brief, validation methodology, conventions)
 └── .beads/          ← This repo is a rig with its own backlog (prefix: ks)
 ```
 
-**Formulas** are TOML-defined workflow templates that compile into Gas Town molecules. They define the steps, dependencies, and gates for each type of work. A formula says "design before implement, test before merge, human approval before architecture decisions proceed." Formulas reference skills by name but don't contain the skill content — they are the process skeleton.
+**Formulas** are TOML-defined workflow templates that compile into Gas Town molecules. They define the steps, dependencies, and gates for each type of work. A formula says "design before implement, test before merge, human approval before architecture decisions proceed." Formulas reference skills by name but don't contain the skill content — they are the process skeleton. Formulas support four types: workflow (sequential steps), aspect (cross-cutting advice), expansion (step-level refinement), and convoy (parallel multi-agent execution with synthesis).
 
-**Skills** are markdown documents containing the rich knowledge agents need to execute each step well. A skill says "when reviewing code, check for these specific patterns, evaluate severity on this scale, structure feedback this way, block the PR if you find these categories of issues." Skills are the institutional expertise, refined over time through validated improvement cycles.
+**Skills** are markdown documents containing the rich knowledge agents need to execute each step well. A skill says "when reviewing code, check for these specific patterns, evaluate severity on this scale, structure feedback this way, block the PR if you find these categories of issues." Skills are the institutional expertise, refined over time through validated improvement cycles. Skills are deployed as Claude Code native commands via symlinks in `.claude/commands/`, enabling `/skill-name` invocation by agents.
 
-**Hooks** are the enforcement mechanisms that make formulas and skills load-bearing rather than advisory. A pre-dispatch hook rejects beads without workflow classification. A session-start hook ensures agents load the correct skills for their role. A post-completion hook observes outcomes and files `ks` beads when something actionable occurs. Hooks guarantee that the system defined by formulas and skills is actually the system that runs.
+**Checklists** are binary READY/NOT READY gate criteria. Each formula step references a checklist file that defines its Definition of Done. An agent evaluates each criterion before closing a step. Checklists are reusable across formulas — `human-gate-passed` serves multiple human gates, `merge-ready` serves any merge step.
+
+**Hooks** are the enforcement mechanisms that make formulas and skills load-bearing rather than advisory. A pre-dispatch hook rejects design-pipeline beads without appropriate triage level. A post-completion hook observes outcomes and files `ks` beads when something actionable occurs (failures, multi-attempts, misclassification, unexpected escalation, duration anomalies). Hooks guarantee that the system defined by formulas and skills is actually the system that runs.
 
 ### Why One Repo
 
-Skills and formulas are tightly coupled. A formula step says `skill:code-review`. The skill defines how to do the code review. When the skill evolves, the formula step description may need to update. When a new formula is added, it often requires a new skill. Hooks enforce both. Splitting these into separate repos creates cross-repo coordination overhead for every change.
+Skills and formulas are tightly coupled. A formula step says `/code-review`. The skill defines how to do the code review. When the skill evolves, the formula step description may need to update. When a new formula is added, it often requires a new skill. Hooks enforce both. Splitting these into separate repos creates cross-repo coordination overhead for every change.
 
 The split point comes later, if it comes at all: when a category of skills emerges that has no formula dependency (general agent behavior, always-on competencies) and grows large enough to justify its own review cadence.
 
@@ -60,21 +64,25 @@ Formulas are the source code of process. Everything below them — protos, molec
 
 ### Workflow Archetypes
 
-Different work needs fundamentally different process shapes. The formula library should cover at least these archetypes:
+Different work needs fundamentally different process shapes. The current formula library contains 8 formulas covering these archetypes:
 
-**Trivial** — Single-step work requiring no design, no review gate. Copy changes, config updates, obvious fixes. The bead IS the spec. Formula: implement → auto-merge. No molecule needed; a single bead suffices.
+**Trivial** (`trivial.formula.toml`) — Single-step work requiring no design, no review gate. Copy changes, config updates, obvious fixes. Formula: implement → submit. 2 steps.
 
-**Standard Feature** — Well-scoped work with a clear implementation path. Requires implementation skill but not design exploration. Formula: implement (per skill:implementation) → test (per skill:testing) → review (per skill:code-review, human gate) → merge.
+**Standard Feature** (`standard-feature.formula.toml`) — Well-scoped work with a clear implementation path. Formula: spec check → implement (per /implementation) → test (per /testing) → review (per /code-review, human gate) → merge. 5 steps.
 
-**Architecture Decision** — Work involving design choices with lasting consequences. Must NOT proceed to implementation without human direction. Formula: research → options generation → direction (human gate, escalation) → spec → spec review (human gate) → decompose into standard-feature sub-beads → verify against spec.
+**Shiny** (`shiny.formula.toml`) — Design-first feature workflow. Similar to standard feature but adds an upfront design phase with review before implementation. Formula: design → review design → implement → review implementation → test → submit. 6 steps.
 
-**Spike / Research** — Time-boxed exploration where the output is knowledge, not code. Formula: define question → investigate (time-boxed) → document findings → recommend (proceed / abandon / pivot) → human decision.
+**Consult** (`consult.formula.toml`) — Investigation workflow producing a design document, not code. Branch persists for mayor review. Formula: research → propose options → deliver. 3 steps.
 
-**Release** — Multi-step process with external wait states (CI, deployment, artifact publishing). Gas Town already has a release formula as a reference pattern.
+**Architecture Decision** (`architecture.formula.toml`) — Work involving design choices with lasting consequences. Must NOT proceed to implementation without human direction. Formula: research → options → direction (human gate) → spec → spec review (human gate) → decompose → verify → retro → retro review (human gate). 10 steps.
 
-**Quality Audit** — Targeted verification against specific standards. Security audit, accessibility sweep, performance review. Formula: define scope → execute audit (per relevant skill) → document findings → file remediation beads → human review of findings.
+**Design Pipeline** (`design-pipeline.formula.toml`) — Multi-phase design with parallel review convoy and human gates. Formula: research → draft → dispatch reviews (convoy) → human gate → finalize → retro → retro review (human gate). 9 steps.
 
-These are starting points. The formula library grows as you recognize new repeatable patterns. Any time work has steps, dependencies, or a gate, it's a formula waiting to be written.
+**Document Review** (`document-review.formula.toml`, type: convoy) — Parallel multi-lens review. 11 available lenses (feasibility, adversarial, completeness, consistency, risk, assumptions, user-impact, cost, security-audit, performance, backward-compat). Named presets select lens subsets. Supports multi-model dispatch (Claude, Gemini, Convex backends). Used as a composable convoy expanded into other formulas like design-pipeline.
+
+**TEA** (`tea.formula.toml`, type: aspect) — Cross-cutting test-first aspect. Weaves acceptance test requirements into any workflow's implement and test steps. Enforces ATDD: write acceptance tests before implementation, verify traceability after.
+
+**Not yet implemented:** spike/research, release, quality-audit, skill-improvement. These remain planned archetypes that can be added as patterns emerge.
 
 ### Triage Classification
 
@@ -119,15 +127,20 @@ Each skill should include:
 - **Red flags** — Specific patterns that indicate the agent is going off track. Adapted from Superpowers' anti-rationalization approach: identify the ways agents typically wriggle out of following the skill, and include explicit counters.
 - **Examples** — Concrete before/after examples showing what the skill produces versus what agents do without it.
 
-### Skill Categories
+### Current Skills
 
-**Execution skills** — How to perform specific workflow steps: code review, testing, implementation, architecture research, spec writing, decomposition.
+**Execution skills** (how to perform workflow steps):
+- `/research` — Problem space investigation before design
+- `/implementation` — Spec-to-code execution
+- `/testing` — Test writing and execution
+- `/acceptance-testing` — ATDD test-first workflow
+- `/pr-merge` — PR-based squash-merge procedure
 
-**Quality skills** — How to evaluate work against standards: security audit patterns, accessibility verification, performance profiling, API contract validation.
+**Quality skills** (how to evaluate work):
+- `/code-review` — Structured code review with BLOCK/SHOULD/NIT classification
+- `/document-review` — Multi-lens document evaluation with gate assessment
 
-**Communication skills** — How to produce artifacts for humans: release notes, stakeholder updates, decision records, escalation messages with proper context.
-
-**Meta skills** — How to write and validate skills themselves. Adapted from obra/superpowers' writing-skills methodology.
+**Not yet built:** architecture-research, spec-writing, decomposition, security-audit, writing-skills (meta-skill). These remain planned skills that can be added as needs emerge.
 
 ### Skill Validation: The Superpowers Methodology
 
@@ -141,21 +154,21 @@ Skills must be validated before deployment. The approach, adapted from obra/supe
 
 **Regression test — Verify the skill doesn't break other things.** Ensure the updated skill doesn't cause over-zealous behavior on tasks where the previous version was correct.
 
-This validation cycle is itself a formula in this repo — the skill-improvement molecule that governs how changes to skills flow through the system. See `docs/validation.md` for the full methodology.
+This validation cycle will become a formula (skill-improvement) once retro patterns are mature enough to formalize. See `docs/validation.md` for the full methodology and the current test scenario inventory.
 
 ### Skill Reference Convention
 
-Formula steps reference skills by name using a `skill:<n>` convention:
+Skills are deployed as Claude Code native commands. Each skill in `skills/` is symlinked into `.claude/commands/`, enabling direct `/skill-name` invocation. Formula steps reference skills using slash-command syntax:
 
 ```toml
 [[steps]]
 id = "code-review"
 title = "Code review"
-description = "Perform code review per skill:code-review"
+description = "Perform code review per /code-review"
 needs = ["implement"]
 ```
 
-Agents resolve `skill:code-review` to the file path `~/gt/keeper/skills/code-review.md`. The town-level CONTEXT.md defines the resolution path.
+Agents invoke `/code-review` which loads the skill via Claude Code's native command system. The 7 current skills and their slash commands: `/research`, `/implementation`, `/testing`, `/code-review`, `/document-review`, `/acceptance-testing`, `/pr-merge`. A `/handoff` command (not a skill file — standalone in `.claude/commands/`) handles session cycling.
 
 ---
 
@@ -165,28 +178,25 @@ Agents resolve `skill:code-review` to the file path `~/gt/keeper/skills/code-rev
 
 Hooks are scripts or validation checks that fire at specific points in the Gas Town lifecycle. They ensure that formulas and skills are actually followed, not just available.
 
-### Hook Categories
+### Implemented Hooks
 
-**Pre-dispatch hooks** — Fire before a bead is slung to a worker.
-- Validate that bead has a workflow classification (trivial/standard/architecture/spike)
-- Validate that triage level is set (auto/review/consult/plan)
-- Reject dispatch if required metadata is missing
+**Pre-dispatch: `validate-design-pipeline-triage.sh`** — Fires before a bead is slung to a worker. Enforces that design-pipeline beads require `consult` or `plan` triage level, rejecting `auto` or `review` triage which would skip the multi-phase review process.
 
-**Session-start hooks** — Fire when an agent session begins.
-- Inject role-appropriate skill references into agent context
-- Ensure agent has access to the keeper repo
-- Load project-specific configuration and constraints
+**Post-completion: `observe-outcomes.sh`** — Fires when a bead is closed via `gt done`. Evaluates outcomes and files `ks` retro beads for 6 actionable conditions:
+- Bead rejected or abandoned (ESCALATED/DEFERRED status)
+- Multi-attempt beads (attempt:N labels, recycled/retry)
+- Auto-triage beads that needed human intervention
+- Escalation outside designated human gates
+- Duration exceeded formula thresholds (trivial: 30min, standard: 4h, architecture: 24h)
+- Test failures (tests-failed, ci-failed labels)
 
-**Post-completion hooks** — Fire when a bead is closed via `gt done`.
-- Evaluate outcome against expectations for the formula type
-- If actionable (failure, repeated attempts, misclassification, unexpected escalation): file a `ks` bead
-- If observation matches an existing `ks` issue: link to it instead of creating a duplicate
-- Routine successes: do nothing
+Links matching observations to existing open `ks` issues for deduplication. Routine successes produce nothing.
 
-**Pre-merge hooks** — Fire before the Refinery merges work.
-- Enforce that review-tier beads have received human approval
-- Validate that required molecule phases completed before implementation phases
-- Check that skill-mandated artifacts exist (e.g., decision records for architecture work)
+### Planned Hooks (Not Yet Implemented)
+
+**Session-start hooks** — Inject role-appropriate skill references into agent context. Currently handled by Gas Town's own context injection (`gt prime`).
+
+**Pre-merge hooks** — Enforce review gates and artifact requirements before Refinery merges. Currently enforcement is structural (bead dependencies, human gates in formulas).
 
 ### Retro Through Beads
 
@@ -275,52 +285,62 @@ The key insight: `gt prime` injects Gas Town mechanics (commands, propulsion, se
 ### Directory Structure
 
 ```
-~/gt/                                ← Gas Town root (the-citadel)
+~/gt/                                ← Gas Town root
 ├── CLAUDE.md                        ← Gas Town default (identity anchor)
-├── AGENTS.md                        ← Gas Town default (beads reference)
 ├── CONTEXT.md                       ← Operational system, skill resolution, triage heuristics
 ├── mayor/                           ← Global coordinator
-├── deacon/                          ← Daemon agent
 ├── keeper/                          ← This repo, mounted as a rig
-│   ├── CLAUDE.md                    ← Points to @AGENTS.md
-│   ├── AGENTS.md                    ← Full keeper playbook
-│   ├── docs/
-│   │   ├── brief.md                 ← This document
-│   │   ├── validation.md            ← Superpowers methodology
-│   │   └── conventions.md           ← Naming, format, structure rules
-│   ├── formulas/
+│   ├── CLAUDE.md                    ← Points to keeper playbook
+│   ├── formulas/                    ← 8 workflow templates
 │   │   ├── trivial.formula.toml
 │   │   ├── standard-feature.formula.toml
+│   │   ├── shiny.formula.toml
+│   │   ├── consult.formula.toml
 │   │   ├── architecture.formula.toml
-│   │   ├── spike.formula.toml
-│   │   ├── release.formula.toml
-│   │   ├── quality-audit.formula.toml
-│   │   └── skill-improvement.formula.toml
-│   ├── skills/
-│   │   ├── code-review.md
+│   │   ├── design-pipeline.formula.toml
+│   │   ├── document-review.formula.toml  ← convoy type
+│   │   └── tea.formula.toml              ← aspect type
+│   ├── skills/                      ← 7 execution skills
+│   │   ├── research.md
 │   │   ├── implementation.md
 │   │   ├── testing.md
-│   │   ├── architecture-research.md
-│   │   ├── spec-writing.md
-│   │   ├── decomposition.md
-│   │   ├── security-audit.md
-│   │   ├── writing-skills.md        ← meta-skill, from Superpowers methodology
+│   │   ├── code-review.md
+│   │   ├── document-review.md
+│   │   ├── acceptance-testing.md
+│   │   └── pr-merge.md
+│   ├── .claude/commands/            ← Symlinks to skills (slash commands)
+│   │   ├── research.md → ../../skills/research.md
+│   │   ├── implementation.md → ...
+│   │   ├── handoff.md               ← Standalone command (not a skill)
+│   │   └── ...
+│   ├── checklists/                  ← 17 binary gate criteria
+│   │   ├── impl-ready.md
+│   │   ├── tests-pass.md
+│   │   ├── human-gate-passed.md
+│   │   ├── merge-ready.md
 │   │   └── ...
 │   ├── hooks/
 │   │   ├── pre-dispatch/
-│   │   │   └── validate-classification.sh
-│   │   ├── post-completion/
-│   │   │   └── observe-outcomes.sh
-│   │   ├── pre-merge/
-│   │   │   └── enforce-review-gate.sh
-│   │   └── session-start/
-│   │       └── load-skills.sh
+│   │   │   └── validate-design-pipeline-triage.sh
+│   │   └── post-completion/
+│   │       └── observe-outcomes.sh
 │   ├── tests/
-│   │   ├── scenarios/               ← Red/green test scenarios per skill
-│   │   └── results/                 ← Captured outputs from validation runs
+│   │   ├── scenarios/               ← 9 red/green/pressure scenarios
+│   │   │   ├── document-review/     ← 6 scenarios
+│   │   │   └── research/            ← 3 scenarios
+│   │   ├── cook-all-formulas.sh
+│   │   └── validate-design-pipeline-triage.sh
+│   ├── .github/workflows/ci.yml     ← TOML validation, shellcheck, formula cook
+│   ├── docs/
+│   │   ├── brief.md                 ← This document
+│   │   ├── conventions.md           ← Naming, format, structure rules
+│   │   ├── validation.md            ← Superpowers testing methodology
+│   │   ├── designs/                 ← Design documents from consult beads
+│   │   ├── bmad-study.md            ← BMAD persona methodology research
+│   │   ├── superpowers-study.md     ← Superpowers writing-skills research
+│   │   └── formula-audit.md         ← Formula structure audit
 │   └── .beads/                      ← Keeper rig's own backlog (prefix: ks)
 ├── project-a/                       ← Project rig
-├── project-b/                       ← Project rig
 └── ...
 ```
 
@@ -335,8 +355,9 @@ All workflow templates, execution skills, and enforcement hooks are defined in
 the keeper rig (~/gt/keeper/). This is the institutional seed bank.
 
 ### Skill Resolution
-When a formula step references skill:<n>, read ~/gt/keeper/skills/<n>.md
-and follow its instructions.
+When a formula step references /skill-name, the agent invokes it as a Claude
+Code slash command. Skills live in ~/gt/keeper/skills/ and are symlinked
+into .claude/commands/ for native invocation.
 
 ### Workflow Classification
 Every bead must be classified before dispatch. Classification determines which
@@ -357,49 +378,48 @@ link to the existing ks issue rather than creating a duplicate.
 
 ### Formula Deployment
 
-Formulas in this repo need to be accessible to Gas Town's `bd cook` and `bd mol pour` commands. There are two paths:
+Formulas are accessed by Gas Town's `bd cook` and `bd mol pour` / `bd mol wisp` commands. The Mayor dispatches work using formulas, reading the TOML to understand the workflow shape and creating molecules via `bd` commands.
 
-1. **Symlink formulas into each rig's `.beads/formulas/` directory.** This makes them available to `bd` commands run in that rig's context.
-
-2. **Use the keeper's formulas as reference and have the Mayor pour them.** The Mayor reads the TOML, understands the workflow shape, and creates the molecule by running `bd` commands. This is more flexible but relies on the Mayor correctly interpreting the formula.
-
-The first approach is more reliable for structural enforcement. Test which approach works with the current Gas Town formula resolution system.
+CI validates all formulas on every PR: TOML syntax check, shellcheck on hook scripts, and `bd cook` structural validation (when `bd` is available).
 
 ---
 
-## Getting Started
+## Progress
 
-### Phase 1: Foundation (Day 1)
+### Phase 1: Foundation — Complete
 
-1. Create the repo with the directory structure above.
-2. Write the town-level CONTEXT.md with skill resolution path and classification heuristics.
-3. Write the keeper's CLAUDE.md (points to AGENTS.md) and AGENTS.md (full playbook).
-4. Write 2-3 starter formulas: trivial, standard-feature, and one that exercises human gates (architecture or spike).
-5. Write 2-3 starter skills: code-review, implementation, testing. Keep them short — you'll refine through the validation cycle.
-6. Implement the post-completion hook that observes outcomes and files `ks` beads for actionable observations.
-7. Add the repo as a rig: `gt rig add keeper <repo-url>`.
+- Repo created with directory structure, mounted as Gas Town rig (prefix: `ks`)
+- Town-level CONTEXT.md written with skill resolution, triage heuristics, cross-rig routing
+- CLAUDE.md written pointing to keeper playbook
+- 8 formulas built (trivial, standard-feature, shiny, consult, architecture, design-pipeline, document-review convoy, TEA aspect) — exceeds the initial 2-3 target
+- 7 skills built (research, implementation, testing, code-review, document-review, acceptance-testing, pr-merge) — exceeds the initial 2-3 target
+- Skills converted to Claude Code native commands via `.claude/commands/` symlinks
+- Post-completion hook (`observe-outcomes.sh`) implemented with 6 trigger conditions
+- Pre-dispatch hook (`validate-design-pipeline-triage.sh`) implemented
+- 17 checklists created for binary gate evaluation
+- GitHub Actions CI running (TOML validation, shellcheck, formula cook)
+- Squash-merge workflow established via GitHub PRs
 
-### Phase 2: Validation (Week 1)
+### Phase 2: Validation — In Progress
 
-8. Test the standard-feature formula end to end. File a bead, classify it, pour the molecule, sling to a polecat, observe the agent walking the steps.
-9. Verify human gates work: architecture formula should block at the direction step until you act.
-10. Run Superpowers-style red/green tests on each starter skill. Observe agent behavior without the skill, then with it. Refine.
-11. Verify post-completion hook fires and files `ks` beads for failures and misclassifications.
+- 9 test scenarios written across 2 skills (document-review: 6 scenarios, research: 3 scenarios)
+- Document-review scenarios include red test (rubber-stamp), green test (systematic lens review), and 4 pressure scenarios
+- Research scenarios include red test (premature solutioning), green test (structured research), and 1 application scenario
+- 5 skills still lack test scenarios: implementation, testing, code-review, acceptance-testing, pr-merge
+- End-to-end formula testing happening through live bead execution
+- Post-completion hook firing in production
 
-### Phase 3: Learning Loop (Week 2+)
+### Phase 3: Learning Loop — Early
 
-12. Implement the retro review process: triage the `ks` backlog sorted by linked-bead count.
-13. File first skill improvement beads based on retro patterns.
-14. Run the skill-improvement molecule for the first time. Validate that the process works end to end: red test → draft → green test → adversarial test → review → merge.
-15. Begin expanding formula library based on work patterns you encounter.
+- Cross-rig bead routing operational (any rig files `ks`-prefixed beads)
+- Retro beads accumulating from post-completion hook observations
+- Skill-improvement formula not yet written (retro patterns still emerging)
 
-### Phase 4: Compound Growth (Ongoing)
+### Phase 4: Compound Growth — Ongoing
 
-16. Cross-rig bead routing: ensure project rigs can file beads against the keeper rig using the `ks` prefix.
-17. Formula library grows as new workflow patterns emerge.
-18. Skills deepen as the retro system surfaces specific failure modes via linked-bead frequency.
-19. Hooks tighten as you identify enforcement gaps.
-20. The keeper becomes the institutional memory that makes every new project start from a higher baseline.
+- Formula library expanding based on encountered work patterns (design-pipeline, document-review convoy emerged from real needs)
+- Planned formulas not yet built: spike/research, release, quality-audit, skill-improvement
+- Hook coverage: 2 of 4 planned categories implemented (pre-dispatch, post-completion; session-start and pre-merge remain structural only)
 
 ---
 

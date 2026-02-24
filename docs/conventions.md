@@ -489,6 +489,13 @@ The synthesis step uses the model information to produce the Cross-Model Disagre
 - Exit 0 = pass, non-zero = reject/fail
 - Hooks should write to stderr for rejection reasons
 
+### Implemented Hooks
+
+| Hook | Location | Purpose |
+|------|----------|---------|
+| `validate-design-pipeline-triage.sh` | `hooks/pre-dispatch/` | Rejects design-pipeline beads at auto/review triage |
+| `observe-outcomes.sh` | `hooks/post-completion/` | Files retro beads for 6 actionable outcome patterns |
+
 ## Retro Beads
 
 Post-completion hooks file `ks` beads for actionable observations. No separate log file.

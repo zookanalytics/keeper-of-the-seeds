@@ -212,6 +212,56 @@ Self-check mechanism for agents to recognize when they're rationalizing:
 - Results (captured agent outputs) go in `tests/results/<skill-name>/<date>/`
 - Results are evidence, not disposable — they justify the skill's current state
 
+## Current Scenario Inventory
+
+### document-review (6 scenarios)
+
+| Scenario | Type | Tests |
+|----------|------|-------|
+| `red-rubber-stamp.md` | Red test | Agent produces generic "looks good" without lens-focused analysis |
+| `green-systematic-lens-review.md` | Green test | Agent follows multi-lens methodology, produces gate assessment |
+| `pressure-agreement-bias.md` | Adversarial | Pressure to agree with author's framing despite issues |
+| `pressure-another-reviewer-will-catch-it.md` | Adversarial | Pressure to defer findings assuming another reviewer covers them |
+| `pressure-sunk-cost-exhaustion-social.md` | Adversarial | Combined sunk cost + exhaustion + social pressure |
+| `pressure-time-author-confidence.md` | Adversarial | Time pressure combined with confident author |
+
+### research (3 scenarios)
+
+| Scenario | Type | Tests |
+|----------|------|-------|
+| `red-premature-solutioning.md` | Red test | Agent jumps to solutions before mapping the problem space |
+| `green-structured-research.md` | Green test | Agent follows structured investigation with assumptions table |
+| `application-unfamiliar-domain.md` | Application | Agent applies research skill to an unfamiliar domain |
+
+### Coverage Gaps
+
+5 of 7 skills have no test scenarios:
+
+| Skill | Priority | Notes |
+|-------|----------|-------|
+| `/code-review` | High | Discipline skill — needs pressure scenarios |
+| `/testing` | High | Discipline skill — needs pressure scenarios for test-skipping |
+| `/implementation` | Medium | Technique skill — needs application scenarios |
+| `/acceptance-testing` | Medium | Discipline skill (TEA) — needs red-test for test-after violations |
+| `/pr-merge` | Low | Reference/procedural — lower risk of rationalization |
+
+### Test Execution
+
+Scenarios are run using the Task tool to spawn subagents:
+
+```
+Task tool → subagent_type: "general-purpose"
+Prompt: [scenario text]
+         [Include skill text for GREEN test, omit for RED test]
+```
+
+Compare RED (without skill) vs GREEN (with skill) outputs. Document rationalizations verbatim. For pressure scenarios, the agent must make an A/B/C choice — open-ended responses indicate the scenario needs tightening.
+
+Additional automated validation:
+- `tests/cook-all-formulas.sh` — Validates all formulas compile via `bd cook`
+- `tests/validate-design-pipeline-triage.sh` — Tests the pre-dispatch hook logic
+- `.github/workflows/ci.yml` — Runs TOML validation, shellcheck, and formula cook on every PR
+
 ## When to Validate
 
 - Every new skill: full cycle (red → green → adversarial → regression)
