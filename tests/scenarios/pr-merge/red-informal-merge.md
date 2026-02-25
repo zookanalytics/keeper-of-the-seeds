@@ -1,7 +1,7 @@
 # Red Test: Informal Merge
 
 ## Skill Under Test
-`skills/pr-merge.md`
+`skills/seed-pr-merge.md`
 
 ## Test Type
 Red — run WITHOUT the pr-merge skill loaded.

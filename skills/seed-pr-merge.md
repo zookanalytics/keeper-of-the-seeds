@@ -1,5 +1,5 @@
 ---
-name: pr-merge
+name: seed-pr-merge
 description: Use when merging a polecat's feature branch to main via GitHub PR, when a formula merge/submit step needs to land code
 ---
 

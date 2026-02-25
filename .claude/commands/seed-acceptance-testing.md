@@ -1,0 +1,1 @@
+../../skills/seed-acceptance-testing.md

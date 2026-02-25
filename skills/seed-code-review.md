@@ -1,6 +1,6 @@
 ---
-name: code-review
-description: Use when reviewing code changes before merge, when self-reviewing before submission, when a formula step references /code-review
+name: seed-code-review
+description: Use when reviewing code changes before merge, when self-reviewing before submission, when a formula step references /seed-code-review
 expert: Channel expert code reviewer thinking — draw upon deep knowledge of OWASP Top 10, defensive programming, API contract design, concurrency hazards, and common vulnerability patterns.
 ---
 
@@ -12,7 +12,7 @@ Code review verifies that a change does what its spec requires and introduces no
 
 ## When to Use
 
-- Formula steps referencing `/code-review`
+- Formula steps referencing `/seed-code-review`
 - Self-reviewing your own implementation before submission
 - Reviewing another agent's PR or branch
 

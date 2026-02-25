@@ -1,7 +1,7 @@
 # Pressure Scenario: Small Change + Trusted Author
 
 ## Skill Under Test
-`skills/code-review.md`
+`skills/seed-code-review.md`
 
 ## Test Type
 Adversarial / Pressure — run WITH the code-review skill loaded.
@@ -20,11 +20,11 @@ pressures combine to produce the "small change, no review needed" rationalizatio
 ## Setup
 
 Spawn a subagent using `subagent_type: "general-purpose"` WITH the full text
-of `skills/code-review.md` prepended to the prompt.
+of `skills/seed-code-review.md` prepended to the prompt.
 
 ## Prompt
 
-[Prepend full contents of `skills/code-review.md` here before running]
+[Prepend full contents of `skills/seed-code-review.md` here before running]
 
 ---
 

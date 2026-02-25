@@ -48,7 +48,7 @@ keeper/
 
 ### Why One Repo
 
-Skills and formulas are tightly coupled. A formula step says `/code-review`. The skill defines how to do the code review. When the skill evolves, the formula step description may need to update. When a new formula is added, it often requires a new skill. Hooks enforce both. Splitting these into separate repos creates cross-repo coordination overhead for every change.
+Skills and formulas are tightly coupled. A formula step says `/seed-code-review`. The skill defines how to do the code review. When the skill evolves, the formula step description may need to update. When a new formula is added, it often requires a new skill. Hooks enforce both. Splitting these into separate repos creates cross-repo coordination overhead for every change.
 
 The split point comes later, if it comes at all: when a category of skills emerges that has no formula dependency (general agent behavior, always-on competencies) and grows large enough to justify its own review cadence.
 
@@ -68,7 +68,7 @@ Different work needs fundamentally different process shapes. The current formula
 
 **Trivial** (`trivial.formula.toml`) — Single-step work requiring no design, no review gate. Copy changes, config updates, obvious fixes. Formula: implement → submit. 2 steps.
 
-**Standard Feature** (`standard-feature.formula.toml`) — Well-scoped work with a clear implementation path. Formula: spec check → implement (per /implementation) → test (per /testing) → review (per /code-review, human gate) → merge. 5 steps.
+**Standard Feature** (`standard-feature.formula.toml`) — Well-scoped work with a clear implementation path. Formula: spec check → implement (per /seed-implementation) → test (per /seed-testing) → review (per /seed-code-review, human gate) → merge. 5 steps.
 
 **Shiny** (`shiny.formula.toml`) — Design-first feature workflow. Similar to standard feature but adds an upfront design phase with review before implementation. Formula: design → review design → implement → review implementation → test → submit. 6 steps.
 
@@ -82,7 +82,7 @@ Different work needs fundamentally different process shapes. The current formula
 
 **TEA** (`tea.formula.toml`, type: aspect) — Cross-cutting test-first aspect. Weaves acceptance test requirements into any workflow's implement and test steps. Enforces ATDD: write acceptance tests before implementation, verify traceability after.
 
-**Not yet implemented:** spike/research, release, quality-audit, skill-improvement. These remain planned archetypes that can be added as patterns emerge.
+**Not yet implemented:** spike/seed-research, release, quality-audit, skill-improvement. These remain planned archetypes that can be added as patterns emerge.
 
 ### Triage Classification
 
@@ -130,15 +130,15 @@ Each skill should include:
 ### Current Skills
 
 **Execution skills** (how to perform workflow steps):
-- `/research` — Problem space investigation before design
-- `/implementation` — Spec-to-code execution
-- `/testing` — Test writing and execution
-- `/acceptance-testing` — ATDD test-first workflow
-- `/pr-merge` — PR-based squash-merge procedure
+- `/seed-research` — Problem space investigation before design
+- `/seed-implementation` — Spec-to-code execution
+- `/seed-testing` — Test writing and execution
+- `/seed-acceptance-testing` — ATDD test-first workflow
+- `/seed-pr-merge` — PR-based squash-merge procedure
 
 **Quality skills** (how to evaluate work):
-- `/code-review` — Structured code review with BLOCK/SHOULD/NIT classification
-- `/document-review` — Multi-lens document evaluation with gate assessment
+- `/seed-code-review` — Structured code review with BLOCK/SHOULD/NIT classification
+- `/seed-document-review` — Multi-lens document evaluation with gate assessment
 
 **Not yet built:** architecture-research, spec-writing, decomposition, security-audit, writing-skills (meta-skill). These remain planned skills that can be added as needs emerge.
 
@@ -164,11 +164,11 @@ Skills are deployed as Claude Code native commands. Each skill in `skills/` is s
 [[steps]]
 id = "code-review"
 title = "Code review"
-description = "Perform code review per /code-review"
+description = "Perform code review per /seed-code-review"
 needs = ["implement"]
 ```
 
-Agents invoke `/code-review` which loads the skill via Claude Code's native command system. The 7 current skills and their slash commands: `/research`, `/implementation`, `/testing`, `/code-review`, `/document-review`, `/acceptance-testing`, `/pr-merge`. A `/handoff` command (not a skill file — standalone in `.claude/commands/`) handles session cycling.
+Agents invoke `/seed-code-review` which loads the skill via Claude Code's native command system. The 7 current skills and their slash commands: `/seed-research`, `/seed-implementation`, `/seed-testing`, `/seed-code-review`, `/seed-document-review`, `/seed-acceptance-testing`, `/seed-pr-merge`. A `/handoff` command (not a skill file — standalone in `.claude/commands/`) handles session cycling.
 
 ---
 
@@ -309,7 +309,7 @@ The key insight: `gt prime` injects Gas Town mechanics (commands, propulsion, se
 │   │   ├── acceptance-testing.md
 │   │   └── pr-merge.md
 │   ├── .claude/commands/            ← Symlinks to skills (slash commands)
-│   │   ├── research.md → ../../skills/research.md
+│   │   ├── research.md → ../../skills/seed-research.md
 │   │   ├── implementation.md → ...
 │   │   ├── handoff.md               ← Standalone command (not a skill)
 │   │   └── ...
@@ -418,7 +418,7 @@ CI validates all formulas on every PR: TOML syntax check, shellcheck on hook scr
 ### Phase 4: Compound Growth — Ongoing
 
 - Formula library expanding based on encountered work patterns (design-pipeline, document-review convoy emerged from real needs)
-- Planned formulas not yet built: spike/research, release, quality-audit, skill-improvement
+- Planned formulas not yet built: spike/seed-research, release, quality-audit, skill-improvement
 - Hook coverage: 2 of 4 planned categories implemented (pre-dispatch, post-completion; session-start and pre-merge remain structural only)
 
 ---

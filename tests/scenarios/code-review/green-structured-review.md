@@ -1,7 +1,7 @@
 # Green Test: Structured Code Review
 
 ## Skill Under Test
-`skills/code-review.md`
+`skills/seed-code-review.md`
 
 ## Test Type
 Green — run WITH the code-review skill loaded.
@@ -14,7 +14,7 @@ and catch the key issues.
 ## Setup
 
 Spawn a subagent using `subagent_type: "general-purpose"` WITH the full text
-of `skills/code-review.md` prepended to the prompt.
+of `skills/seed-code-review.md` prepended to the prompt.
 
 ## Diff to Review
 
@@ -56,7 +56,7 @@ configured. Log a warning if the push fails but don't block the sync.
 
 ## Prompt
 
-[Prepend full contents of `skills/code-review.md` here before running]
+[Prepend full contents of `skills/seed-code-review.md` here before running]
 
 ---
 

@@ -79,7 +79,7 @@ Either path resolves the BLOCKs. Path 1 is more thorough. Path 2 is faster.
 
 ## Review Process Notes
 
-This review was performed as a single-polecat three-lens pass rather than a convoy dispatch with separate polecats per lens. Findings are cross-referenced across lenses where they overlap. Each review file is self-contained and follows the `/document-review` skill output format.
+This review was performed as a single-polecat three-lens pass rather than a convoy dispatch with separate polecats per lens. Findings are cross-referenced across lenses where they overlap. Each review file is self-contained and follows the `/seed-document-review` skill output format.
 
 Files produced:
 - `ks-lzsrz-review-feasibility.md` — Technical viability assessment

@@ -1,0 +1,1 @@
+../../skills/seed-pr-merge.md

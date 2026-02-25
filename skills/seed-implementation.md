@@ -1,6 +1,6 @@
 ---
-name: implementation
-description: Use when implementing code from a bead spec, when a formula step references /implementation, when going from spec to committed code
+name: seed-implementation
+description: Use when implementing code from a bead spec, when a formula step references /seed-implementation, when going from spec to committed code
 expert: Channel expert software engineer thinking — draw upon deep knowledge of clean code principles, design patterns, defensive programming, and incremental delivery practices.
 ---
 
@@ -12,7 +12,7 @@ Implementation turns a bead spec into committed code. **Core principle: do exact
 
 ## When to Use
 
-- Formula steps referencing `/implementation`
+- Formula steps referencing `/seed-implementation`
 - The implement step in `standard-feature`, `trivial`, and similar workflows
 - Any time you're going from bead spec to committed code
 

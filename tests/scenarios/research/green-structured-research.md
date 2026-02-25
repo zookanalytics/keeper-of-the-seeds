@@ -1,7 +1,7 @@
 # Green Test: Structured Research
 
 ## Skill Under Test
-`skills/research.md`
+`skills/seed-research.md`
 
 ## Test Type
 Green — run WITH the research skill loaded.
@@ -15,11 +15,11 @@ catalog prior art, and surface open questions without proposing solutions.
 ## Setup
 
 Spawn a subagent using `subagent_type: "general-purpose"` WITH the full text
-of `skills/research.md` prepended to the prompt.
+of `skills/seed-research.md` prepended to the prompt.
 
 ## Prompt
 
-[Prepend full contents of `skills/research.md` here before running]
+[Prepend full contents of `skills/seed-research.md` here before running]
 
 ---
 

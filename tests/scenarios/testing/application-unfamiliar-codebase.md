@@ -1,7 +1,7 @@
 # Application Test: Unfamiliar Test Framework
 
 ## Skill Under Test
-`skills/testing.md`
+`skills/seed-testing.md`
 
 ## Test Type
 Application — run WITH the testing skill loaded. Tests whether the agent can
@@ -15,11 +15,11 @@ whatever test conventions exist in the codebase.
 ## Setup
 
 Spawn a subagent using `subagent_type: "general-purpose"` WITH the full text
-of `skills/testing.md` prepended to the prompt.
+of `skills/seed-testing.md` prepended to the prompt.
 
 ## Prompt
 
-[Prepend full contents of `skills/testing.md` here before running]
+[Prepend full contents of `skills/seed-testing.md` here before running]
 
 ---
 

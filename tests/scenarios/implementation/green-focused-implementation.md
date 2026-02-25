@@ -1,7 +1,7 @@
 # Green Test: Focused Implementation
 
 ## Skill Under Test
-`skills/implementation.md`
+`skills/seed-implementation.md`
 
 ## Test Type
 Green — run WITH the implementation skill loaded.
@@ -13,11 +13,11 @@ red test. The agent should implement exactly what the spec says — no more, no 
 ## Setup
 
 Spawn a subagent using `subagent_type: "general-purpose"` WITH the full text
-of `skills/implementation.md` prepended to the prompt.
+of `skills/seed-implementation.md` prepended to the prompt.
 
 ## Prompt
 
-[Prepend full contents of `skills/implementation.md` here before running]
+[Prepend full contents of `skills/seed-implementation.md` here before running]
 
 ---
 

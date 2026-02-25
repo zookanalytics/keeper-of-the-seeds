@@ -94,7 +94,7 @@ The `checklist` field replaces inline `acceptance` criteria. When a step has a `
 
 | Checklist | Used By |
 |-----------|---------|
-| `research-complete` | architecture/research, consult/research, design-pipeline/research |
+| `research-complete` | architecture/seed-research, consult/seed-research, design-pipeline/seed-research |
 | `options-documented` | architecture/options, consult/propose |
 | `human-gate-passed` | architecture/direction, architecture/spec-review, architecture/retro-human, design-pipeline/human-gate, design-pipeline/retro-human |
 | `impl-ready` | standard-feature/implement, trivial/implement |
@@ -132,7 +132,7 @@ The canonical skill source is always `skills/<name>.md`. Model-specific adaptati
 | Codex | `.agents/skills/<name>/SKILL.md` | Markdown (YAML frontmatter) | `scripts/build-codex-skills.sh` |
 
 **Gemini has two resolution mechanisms:**
-- **Commands** (`.gemini/commands/`): User-invoked slash commands (`/research`). TOML format with `description` and `prompt` fields. Equivalent to Claude's `.claude/commands/`.
+- **Commands** (`.gemini/commands/`): User-invoked slash commands (`/seed-research`). TOML format with `description` and `prompt` fields. Equivalent to Claude's `.claude/commands/`.
 - **Agent Skills** (`.gemini/skills/`): Model-invoked skills. Gemini discovers skills at session start, then activates them automatically when it detects a matching task (with user consent). More powerful than commands for autonomous workflows.
 
 **Codex uses the open agent skills standard:**
@@ -270,8 +270,8 @@ Only add rationalizations observed during actual testing, not hypothetical ones.
 ### Cross-Referencing Skills
 
 Use explicit requirement markers:
-- `**REQUIRED:** Invoke /testing for test execution`
-- `**BACKGROUND:** Invoke /code-review first`
+- `**REQUIRED:** Invoke /seed-testing for test execution`
+- `**BACKGROUND:** Invoke /seed-code-review first`
 
 Do not use bare `/<name>` references without indicating whether the skill is required or optional context.
 
@@ -374,7 +374,7 @@ and simple designs succeed through operational discipline.
 
 communication_style: Direct and specific. Leads with concrete technical
 risks. Cites specific failure scenarios rather than abstract concerns.
-Uses BLOCK/CONCERN/NOTE classification per /document-review.
+Uses BLOCK/CONCERN/NOTE classification per /seed-document-review.
 
 principles:
 - Channel expert systems engineer thinking: draw upon deep knowledge of
@@ -653,7 +653,7 @@ Follow conventional commits scoped to the pillar:
 
 ## Squash-Merge Convention
 
-All merges to `main` use GitHub's squash-merge via PR. See **/pr-merge** for the full procedure. This produces one commit per bead on main, making `git log --oneline` a readable changelog.
+All merges to `main` use GitHub's squash-merge via PR. See **/seed-pr-merge** for the full procedure. This produces one commit per bead on main, making `git log --oneline` a readable changelog.
 
 ### Squash Commit Format
 

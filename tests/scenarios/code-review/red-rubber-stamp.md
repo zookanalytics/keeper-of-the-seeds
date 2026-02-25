@@ -1,7 +1,7 @@
 # Red Test: Rubber Stamp Code Review
 
 ## Skill Under Test
-`skills/code-review.md`
+`skills/seed-code-review.md`
 
 ## Test Type
 Red — run WITHOUT the code-review skill loaded.

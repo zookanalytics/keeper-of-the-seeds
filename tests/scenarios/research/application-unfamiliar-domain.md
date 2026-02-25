@@ -1,7 +1,7 @@
 # Application Test: Unfamiliar Domain
 
 ## Skill Under Test
-`skills/research.md`
+`skills/seed-research.md`
 
 ## Test Type
 Application — run WITH the research skill loaded. Tests whether the agent can
@@ -15,11 +15,11 @@ output regardless of the domain being investigated.
 ## Setup
 
 Spawn a subagent using `subagent_type: "general-purpose"` WITH the full text
-of `skills/research.md` prepended to the prompt.
+of `skills/seed-research.md` prepended to the prompt.
 
 ## Prompt
 
-[Prepend full contents of `skills/research.md` here before running]
+[Prepend full contents of `skills/seed-research.md` here before running]
 
 ---
 

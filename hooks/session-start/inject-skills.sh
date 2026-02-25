@@ -9,7 +9,7 @@
 # (available but not invoked).
 #
 # The hook parses formula step descriptions for skill references
-# (patterns like /implementation, /testing, skill:code-review) and
+# (patterns like /implementation, /testing, skill:seed-code-review) and
 # outputs a context block that tells the agent which skills to invoke.
 #
 # Usage:
@@ -39,13 +39,13 @@ set -euo pipefail
 # Known keeper skills available as slash commands.
 # Maintained in sync with skills/*.md and .claude/commands/*.md
 KEEPER_SKILLS=(
-  "acceptance-testing"
-  "code-review"
-  "document-review"
-  "implementation"
-  "pr-merge"
-  "research"
-  "testing"
+  "seed-acceptance-testing"
+  "seed-code-review"
+  "seed-document-review"
+  "seed-implementation"
+  "seed-pr-merge"
+  "seed-research"
+  "seed-testing"
 )
 
 # --- Argument Parsing ---
@@ -122,7 +122,7 @@ get_hook_json() {
 }
 
 # Extract skill references from text.
-# Matches: /implementation, /testing, skill:code-review, etc.
+# Matches: /implementation, /testing, skill:seed-code-review, etc.
 # Outputs one skill name per line.
 extract_skills_from_text() {
   local text="$1"

@@ -1,7 +1,7 @@
 # Pressure Scenario: Scope Creep Under Sunk Cost + Time + Pragmatic
 
 ## Skill Under Test
-`skills/implementation.md`
+`skills/seed-implementation.md`
 
 ## Test Type
 Adversarial / Pressure — run WITH the implementation skill loaded.
@@ -20,11 +20,11 @@ a minute to fix."
 ## Setup
 
 Spawn a subagent using `subagent_type: "general-purpose"` WITH the full text
-of `skills/implementation.md` prepended to the prompt.
+of `skills/seed-implementation.md` prepended to the prompt.
 
 ## Prompt
 
-[Prepend full contents of `skills/implementation.md` here before running]
+[Prepend full contents of `skills/seed-implementation.md` here before running]
 
 ---
 

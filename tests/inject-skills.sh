@@ -115,10 +115,10 @@ echo "=== Basic output ==="
 run_test "produces KEEPER SKILLS header" 0 "\\[KEEPER SKILLS\\]" \
   --keeper-root "$REPO_ROOT"
 
-run_test "lists available skills" 0 "/implementation" \
+run_test "lists available skills" 0 "/seed-implementation" \
   --keeper-root "$REPO_ROOT"
 
-run_test "lists all 7 skills" 0 "/testing" \
+run_test "lists all 7 skills" 0 "/seed-testing" \
   --keeper-root "$REPO_ROOT"
 
 echo
@@ -146,12 +146,12 @@ run_test "--help exits cleanly" 0 "Session-start hook" --help
 echo
 echo "=== Skill extraction from molecule step ==="
 
-# Mock bd mol current returning a step with /implementation skill reference
-run_test_mock "extracts /implementation from mol step" 0 "→ /implementation" '
+# Mock bd mol current returning a step with /seed-implementation skill reference
+run_test_mock "extracts /seed-implementation from mol step" 0 "→ /seed-implementation" '
   cat > "$mock_dir/bd" << "MOCK"
 #!/usr/bin/env bash
 if [[ "$1" == "mol" && "$2" == "current" ]]; then
-  echo '"'"'[{"molecule_id":"test-mol","next_step":{"title":"Implement feature","description":"Implement the feature per /implementation. Read the spec.","status":"open"}}]'"'"'
+  echo '"'"'[{"molecule_id":"test-mol","next_step":{"title":"Implement feature","description":"Implement the feature per /seed-implementation. Read the spec.","status":"open"}}]'"'"'
   exit 0
 fi
 exit 1
@@ -164,12 +164,12 @@ MOCK
   chmod +x "$mock_dir/gt"
 '
 
-# Mock with /testing reference
-run_test_mock "extracts /testing from mol step" 0 "→ /testing" '
+# Mock with /seed-testing reference
+run_test_mock "extracts /seed-testing from mol step" 0 "→ /seed-testing" '
   cat > "$mock_dir/bd" << "MOCK"
 #!/usr/bin/env bash
 if [[ "$1" == "mol" && "$2" == "current" ]]; then
-  echo '"'"'[{"molecule_id":"test-mol","next_step":{"title":"Test feature","description":"Write and run tests per /testing.","status":"open"}}]'"'"'
+  echo '"'"'[{"molecule_id":"test-mol","next_step":{"title":"Test feature","description":"Write and run tests per /seed-testing.","status":"open"}}]'"'"'
   exit 0
 fi
 exit 1
@@ -183,11 +183,11 @@ MOCK
 '
 
 # Mock with multiple skill references
-run_test_mock "extracts multiple skills from step" 0 "→ /implementation" '
+run_test_mock "extracts multiple skills from step" 0 "→ /seed-implementation" '
   cat > "$mock_dir/bd" << "MOCK"
 #!/usr/bin/env bash
 if [[ "$1" == "mol" && "$2" == "current" ]]; then
-  echo '"'"'[{"molecule_id":"test-mol","next_step":{"title":"Implement and test","description":"Use /implementation then /testing to verify","status":"open"}}]'"'"'
+  echo '"'"'[{"molecule_id":"test-mol","next_step":{"title":"Implement and test","description":"Use /seed-implementation then /seed-testing to verify","status":"open"}}]'"'"'
   exit 0
 fi
 exit 1
@@ -204,7 +204,7 @@ echo
 echo "=== No molecule step — fallback to hooked bead ==="
 
 # Mock: no molecule, but hooked bead with skill references
-run_test_mock "extracts skill from hooked bead description" 0 "→ /code-review" '
+run_test_mock "extracts skill from hooked bead description" 0 "→ /seed-code-review" '
   cat > "$mock_dir/bd" << "MOCK"
 #!/usr/bin/env bash
 if [[ "$1" == "mol" && "$2" == "current" ]]; then
@@ -217,7 +217,7 @@ MOCK
   cat > "$mock_dir/gt" << "MOCK"
 #!/usr/bin/env bash
 if [[ "$1" == "hook" && "$2" == "--json" ]]; then
-  echo '"'"'{"has_work":true,"pinned_bead":{"description":"Review the PR per /code-review"}}'"'"'
+  echo '"'"'{"has_work":true,"pinned_bead":{"description":"Review the PR per /seed-code-review"}}'"'"'
   exit 0
 fi
 exit 1
@@ -256,7 +256,7 @@ run_test_mock "includes enforcement message when skills found" 0 "structural" '
   cat > "$mock_dir/bd" << "MOCK"
 #!/usr/bin/env bash
 if [[ "$1" == "mol" && "$2" == "current" ]]; then
-  echo '"'"'[{"molecule_id":"test","next_step":{"title":"Test","description":"Run /testing","status":"open"}}]'"'"'
+  echo '"'"'[{"molecule_id":"test","next_step":{"title":"Test","description":"Run /seed-testing","status":"open"}}]'"'"'
   exit 0
 fi
 exit 1
@@ -276,7 +276,7 @@ run_test_mock "shows step title when available" 0 "Current step: Implement featu
   cat > "$mock_dir/bd" << "MOCK"
 #!/usr/bin/env bash
 if [[ "$1" == "mol" && "$2" == "current" ]]; then
-  echo '"'"'[{"molecule_id":"test","next_step":{"title":"Implement feature","description":"per /implementation","status":"open"}}]'"'"'
+  echo '"'"'[{"molecule_id":"test","next_step":{"title":"Implement feature","description":"per /seed-implementation","status":"open"}}]'"'"'
   exit 0
 fi
 exit 1
@@ -292,11 +292,11 @@ MOCK
 echo
 echo "=== old-style skill: references ==="
 
-run_test_mock "matches skill:code-review format" 0 "→ /code-review" '
+run_test_mock "matches skill:seed-code-review format" 0 "→ /seed-code-review" '
   cat > "$mock_dir/bd" << "MOCK"
 #!/usr/bin/env bash
 if [[ "$1" == "mol" && "$2" == "current" ]]; then
-  echo '"'"'[{"molecule_id":"test","next_step":{"title":"Review","description":"Perform review per skill:code-review","status":"open"}}]'"'"'
+  echo '"'"'[{"molecule_id":"test","next_step":{"title":"Review","description":"Perform review per skill:seed-code-review","status":"open"}}]'"'"'
   exit 0
 fi
 exit 1
