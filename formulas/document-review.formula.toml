@@ -1,7 +1,7 @@
 # Document Review Convoy Formula
 #
 # Parallel multi-lens document review. Spawns reviewers in parallel,
-# each applying a different review lens per /document-review.
+# each applying a different review lens per /seed-document-review.
 # Results synthesized into a unified review with gate assessment.
 #
 # Standalone usage:
@@ -13,7 +13,7 @@
 #   with = "document-review"
 
 description = """
-Parallel multi-lens document review convoy. Each leg applies /document-review
+Parallel multi-lens document review convoy. Each leg applies /seed-document-review
 with a different review lens. Findings are synthesized into a unified review with
 BLOCK/CONCERN/NOTE classification and a binary READY/NOT READY gate assessment.
 
@@ -54,7 +54,7 @@ Disagreement Analysis section that highlights where models diverge.
 
 ## Execution Model
 1. Each leg spawns as a separate polecat with an assigned lens
-2. Polecats work in parallel per /document-review
+2. Polecats work in parallel per /seed-document-review
 3. If a leg specifies `agent`, the dispatcher uses `--agent` to select the model
 4. Each commits their review to the branch
 5. Synthesis step combines all findings into unified gate assessment
@@ -96,14 +96,14 @@ You are a specialized document reviewer participating in a review convoy.
 - **Model**: {{.leg.agent | default "default"}}
 
 ## Your Task
-Review the document through the **{{.leg.focus}}** lens per **/document-review**.
+Review the document through the **{{.leg.focus}}** lens per **/seed-document-review**.
 
 {{.leg.description}}
 
 ## Output Requirements
 Write your review to: **{{.output_path}}**
 
-Follow the output format defined in /document-review:
+Follow the output format defined in /seed-document-review:
 
 ```
 ## Review: {{.topic}}
@@ -150,7 +150,7 @@ title = "Feasibility Review"
 focus = "Technical viability and implementation risk"
 # agent = "claude"  # Optional: override model backend (used by multi-model presets)
 description = """
-Review the document through a feasibility lens per /document-review.
+Review the document through a feasibility lens per /seed-document-review.
 
 **Key questions:**
 - Can this actually be built with available resources and constraints?
@@ -171,7 +171,7 @@ title = "Adversarial Review"
 focus = "Red-team / devil's advocate challenge"
 # agent = "gemini"  # Optional: override model backend (used by multi-model presets)
 description = """
-Review the document through an adversarial lens per /document-review.
+Review the document through an adversarial lens per /seed-document-review.
 
 **Key questions:**
 - What's the strongest argument against this approach?
@@ -192,7 +192,7 @@ title = "Completeness Review"
 focus = "Coverage gaps and missing requirements"
 # agent = "convex"  # Optional: override model backend (used by multi-model presets)
 description = """
-Review the document through a completeness lens per /document-review.
+Review the document through a completeness lens per /seed-document-review.
 
 **Key questions:**
 - Does it address every stated requirement? What's missing?
@@ -216,7 +216,7 @@ id = "consistency"
 title = "Consistency Review"
 focus = "Internal coherence and contradictions"
 description = """
-Review the document through a consistency lens per /document-review.
+Review the document through a consistency lens per /seed-document-review.
 
 **Key questions:**
 - Do sections contradict each other?
@@ -236,7 +236,7 @@ id = "risk"
 title = "Risk Review"
 focus = "Failure modes and mitigation gaps"
 description = """
-Review the document through a risk lens per /document-review.
+Review the document through a risk lens per /seed-document-review.
 
 **Key questions:**
 - What are the biggest risks? Are they identified?
@@ -256,7 +256,7 @@ id = "assumptions"
 title = "Assumptions Review"
 focus = "Hidden dependencies and load-bearing assumptions"
 description = """
-Review the document through an assumptions lens per /document-review.
+Review the document through an assumptions lens per /seed-document-review.
 
 **Key questions:**
 - What's taken for granted that should be stated explicitly?
@@ -276,7 +276,7 @@ id = "user-impact"
 title = "User Impact Review"
 focus = "End-user perspective and migration concerns"
 description = """
-Review the document through a user-impact lens per /document-review.
+Review the document through a user-impact lens per /seed-document-review.
 
 **Key questions:**
 - How does this affect end users? Is the impact assessed?
@@ -296,7 +296,7 @@ id = "cost"
 title = "Cost Review"
 focus = "Complexity budget and simpler alternatives"
 description = """
-Review the document through a cost lens per /document-review.
+Review the document through a cost lens per /seed-document-review.
 
 **Key questions:**
 - Is this the simplest approach that works?
@@ -320,7 +320,7 @@ id = "security-audit"
 title = "Security Audit Review"
 focus = "Threat modeling and vulnerability surface"
 description = """
-Review the document through a security-audit lens per /document-review.
+Review the document through a security-audit lens per /seed-document-review.
 
 **Key questions:**
 - Does the design introduce new attack surface? Where are trust boundaries?
@@ -344,7 +344,7 @@ id = "performance"
 title = "Performance Review"
 focus = "Latency budgets, throughput, and scaling"
 description = """
-Review the document through a performance lens per /document-review.
+Review the document through a performance lens per /seed-document-review.
 
 **Key questions:**
 - Are latency budgets defined for critical user-facing paths?
@@ -368,7 +368,7 @@ id = "backward-compat"
 title = "Backward Compatibility Review"
 focus = "API contracts, data formats, and migration"
 description = """
-Review the document through a backward-compat lens per /document-review.
+Review the document through a backward-compat lens per /seed-document-review.
 
 **Key questions:**
 - Does this break existing API contracts (REST, gRPC, CLI, SDK)?

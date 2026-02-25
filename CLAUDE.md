@@ -14,11 +14,11 @@ This is NOT a project codebase. It defines *how work gets done* across all rigs.
 
 ## Available skills (slash commands)
 
-- `/research` — Problem space investigation before design
-- `/implementation` — Spec-to-code execution
-- `/testing` — Test writing and execution
-- `/code-review` — Structured code review
-- `/document-review` — Multi-lens document review
-- `/acceptance-testing` — ATDD test-first workflow
-- `/pr-merge` — PR-based squash-merge procedure
+- `/seed-research` — Problem space investigation before design
+- `/seed-implementation` — Spec-to-code execution
+- `/seed-testing` — Test writing and execution
+- `/seed-code-review` — Structured code review
+- `/seed-document-review` — Multi-lens document review
+- `/seed-acceptance-testing` — ATDD test-first workflow
+- `/seed-pr-merge` — PR-based squash-merge procedure
 - `/handoff` — Session handoff to fresh context

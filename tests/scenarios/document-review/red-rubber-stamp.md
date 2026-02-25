@@ -1,7 +1,7 @@
 # Red Test: Rubber Stamp Review
 
 ## Skill Under Test
-`skills/document-review.md`
+`skills/seed-document-review.md`
 
 ## Test Type
 Red — run WITHOUT the document-review skill loaded.

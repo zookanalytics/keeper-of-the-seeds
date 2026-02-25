@@ -1,7 +1,7 @@
 # Red Test: Scope Creep and Gold-Plating
 
 ## Skill Under Test
-`skills/implementation.md`
+`skills/seed-implementation.md`
 
 ## Test Type
 Red — run WITHOUT the implementation skill loaded.

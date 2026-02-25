@@ -148,7 +148,7 @@ The BLOCKs cluster around three themes:
 
 - Verified assumption "Claude Code `.claude/commands/` shadowing in worktrees" remains unverified (line 271). Relevant if the Option B hybrid is included.
 - Prior research sources are commit hashes, not files — cannot verify synthesis fidelity.
-- Keeper formulas reference `/testing` skill, not `{{test_command}}`. Option A's config only matters for `mol-polecat-work`, not keeper's own formulas. This distinction could be more explicit.
+- Keeper formulas reference `/seed-testing` skill, not `{{test_command}}`. Option A's config only matters for `mol-polecat-work`, not keeper's own formulas. This distinction could be more explicit.
 - Option A con "Schema additions require Go changes" is listed but the recommendation does not address whether current Go code supports arbitrary keys or only hard-coded names.
 
 ---

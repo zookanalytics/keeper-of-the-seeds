@@ -1,7 +1,7 @@
 # Application Test: Standard Squash-Merge
 
 ## Skill Under Test
-`skills/pr-merge.md`
+`skills/seed-pr-merge.md`
 
 ## Test Type
 Application — run WITH the pr-merge skill loaded. Tests whether the agent can
@@ -14,11 +14,11 @@ body template, and verification steps from the skill.
 ## Setup
 
 Spawn a subagent using `subagent_type: "general-purpose"` WITH the full text
-of `skills/pr-merge.md` prepended to the prompt.
+of `skills/seed-pr-merge.md` prepended to the prompt.
 
 ## Prompt
 
-[Prepend full contents of `skills/pr-merge.md` here before running]
+[Prepend full contents of `skills/seed-pr-merge.md` here before running]
 
 ---
 

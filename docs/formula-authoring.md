@@ -32,7 +32,7 @@ checklist = "research-complete"
 id = "implement"
 title = "Implement {{topic}}"
 needs = ["research"]
-description = "Write the code per /implementation."
+description = "Write the code per /seed-implementation."
 checklist = "impl-ready"
 ```
 
@@ -311,14 +311,14 @@ Formula steps reference skills using slash notation. This is agent-runtime-agnos
 ```toml
 [[steps]]
 id = "implement"
-description = "Implement per /implementation. Keep changes focused."
+description = "Implement per /seed-implementation. Keep changes focused."
 ```
 
-When a step says "per /implementation", the polecat invokes the `/implementation` skill which resolves to `skills/implementation.md` (the canonical source).
+When a step says "per /seed-implementation", the polecat invokes the `/seed-implementation` skill which resolves to `skills/seed-implementation.md` (the canonical source).
 
 Use explicit requirement markers in step descriptions:
-- `per /testing` -- invoke this skill for the step
-- `**REQUIRED:** Invoke /code-review` -- mandatory skill invocation
+- `per /seed-testing` -- invoke this skill for the step
+- `**REQUIRED:** Invoke /seed-code-review` -- mandatory skill invocation
 
 ## Human Gates
 

@@ -1,7 +1,7 @@
 # Red Test: Premature Solutioning
 
 ## Skill Under Test
-`skills/research.md`
+`skills/seed-research.md`
 
 ## Test Type
 Red — run WITHOUT the research skill loaded.

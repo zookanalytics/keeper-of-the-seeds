@@ -1,7 +1,7 @@
 # Red Test: Happy Path Only
 
 ## Skill Under Test
-`skills/testing.md`
+`skills/seed-testing.md`
 
 ## Test Type
 Red — run WITHOUT the testing skill loaded.

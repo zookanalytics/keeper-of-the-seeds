@@ -1,7 +1,7 @@
 # Pressure Scenario: Skip the Red Phase
 
 ## Skill Under Test
-`skills/acceptance-testing.md`
+`skills/seed-acceptance-testing.md`
 
 ## Test Type
 Adversarial / Pressure — run WITH the acceptance-testing skill loaded.
@@ -20,11 +20,11 @@ feels redundant when "you know the tests will fail because nothing's implemented
 ## Setup
 
 Spawn a subagent using `subagent_type: "general-purpose"` WITH the full text
-of `skills/acceptance-testing.md` prepended to the prompt.
+of `skills/seed-acceptance-testing.md` prepended to the prompt.
 
 ## Prompt
 
-[Prepend full contents of `skills/acceptance-testing.md` here before running]
+[Prepend full contents of `skills/seed-acceptance-testing.md` here before running]
 
 ---
 

@@ -49,13 +49,13 @@ Skills are markdown documents containing rich, specific execution knowledge. A s
 
 | Skill | Purpose | Invocation |
 |-------|---------|------------|
-| `research.md` | Problem space investigation before design | `/research` |
-| `implementation.md` | Spec-to-code execution | `/implementation` |
-| `testing.md` | Test writing and execution | `/testing` |
-| `code-review.md` | Structured review with BLOCK/SHOULD/NIT | `/code-review` |
-| `document-review.md` | Multi-lens evaluation with gate assessment | `/document-review` |
-| `acceptance-testing.md` | ATDD test-first workflow | `/acceptance-testing` |
-| `pr-merge.md` | PR-based squash-merge procedure | `/pr-merge` |
+| `research.md` | Problem space investigation before design | `/seed-research` |
+| `implementation.md` | Spec-to-code execution | `/seed-implementation` |
+| `testing.md` | Test writing and execution | `/seed-testing` |
+| `code-review.md` | Structured review with BLOCK/SHOULD/NIT | `/seed-code-review` |
+| `document-review.md` | Multi-lens evaluation with gate assessment | `/seed-document-review` |
+| `acceptance-testing.md` | ATDD test-first workflow | `/seed-acceptance-testing` |
+| `pr-merge.md` | PR-based squash-merge procedure | `/seed-pr-merge` |
 
 **Deployment:** Skills are symlinked from `skills/` into `.claude/commands/`, enabling native `/slash-command` invocation in Claude Code. Multi-model rigs also deploy to `.gemini/` and `.agents/` via build scripts.
 
@@ -67,7 +67,7 @@ Formulas are TOML workflow templates that define the process skeleton — what s
 
 **What lives here:** Step sequencing, dependency graphs, human gates, checklist references, variable slots. The shape of the workflow.
 
-**What doesn't live here:** How to execute each step (Layer 1), or what specific commands to run (Layer 3). A formula step says `per /testing`, not `run go test ./...`.
+**What doesn't live here:** How to execute each step (Layer 1), or what specific commands to run (Layer 3). A formula step says `per /seed-testing`, not `run go test ./...`.
 
 **Current formulas (8):**
 
@@ -102,7 +102,7 @@ Rig config is a JSON file at `<rig>/settings/config.json` that declares a rig's 
 | `test_command` | `merge_queue.test_command` | `bash tests/cook-all-formulas.sh` |
 | `build_command` | `merge_queue.build_command` | `go build ./...` |
 
-These values are **agent directions**, not blind exec targets. When a polecat reaches a test step, the formula tells it to run the configured command as the minimum quality gate. The agent applies its `/testing` skill judgment on top of this baseline — it can add tests, investigate failures, and make decisions about what to fix.
+These values are **agent directions**, not blind exec targets. When a polecat reaches a test step, the formula tells it to run the configured command as the minimum quality gate. The agent applies its `/seed-testing` skill judgment on top of this baseline — it can add tests, investigate failures, and make decisions about what to fix.
 
 ---
 
@@ -118,15 +118,15 @@ A skill says "write unit tests for new code, integration tests for boundary chan
 
 ### Formulas reference skills, not commands
 
-A formula step says `per /testing`, not `run {{test_command}}`. The formula defines *what* happens (testing) and *when* (after implementation). The skill defines *how* (methodology, coverage expectations, red flags). The rig config defines *what tool* (the actual command).
+A formula step says `per /seed-testing`, not `run {{test_command}}`. The formula defines *what* happens (testing) and *when* (after implementation). The skill defines *how* (methodology, coverage expectations, red flags). The rig config defines *what tool* (the actual command).
 
 The formula step's `description` field does include `{{test_command}}` in the operational context (so the polecat knows what to run), but the step's purpose is defined by the skill reference, not the command.
 
-**Test:** If you could swap `/testing` for a different skill and the formula still makes structural sense, the boundary is clean. The formula doesn't care *how* testing works — only that testing happens at this point.
+**Test:** If you could swap `/seed-testing` for a different skill and the formula still makes structural sense, the boundary is clean. The formula doesn't care *how* testing works — only that testing happens at this point.
 
 ### Rig config values are directions, not scripts
 
-The `test_command` field doesn't contain a comprehensive test script. It contains the minimum quality gate command — the baseline the agent should run. The agent, guided by its `/testing` skill, may do more: add missing tests, investigate flaky failures, run additional suites.
+The `test_command` field doesn't contain a comprehensive test script. It contains the minimum quality gate command — the baseline the agent should run. The agent, guided by its `/seed-testing` skill, may do more: add missing tests, investigate flaky failures, run additional suites.
 
 **Test:** If a config value requires no agent judgment to execute (just run it blindly), it's a well-formed direction. If it requires complex conditional logic, it's doing too much — move the judgment to the skill.
 
@@ -181,13 +181,13 @@ Keeper skills are injected into a rig's working directory via symlinks in `.clau
 
 ```
 <rig>/.claude/commands/
-├── research.md → ~/gt/keeper/skills/research.md
-├── implementation.md → ~/gt/keeper/skills/implementation.md
-├── testing.md → ~/gt/keeper/skills/testing.md
-├── code-review.md → ~/gt/keeper/skills/code-review.md
-├── document-review.md → ~/gt/keeper/skills/document-review.md
-├── acceptance-testing.md → ~/gt/keeper/skills/acceptance-testing.md
-├── pr-merge.md → ~/gt/keeper/skills/pr-merge.md
+├── research.md → ~/gt/keeper/skills/seed-research.md
+├── implementation.md → ~/gt/keeper/skills/seed-implementation.md
+├── testing.md → ~/gt/keeper/skills/seed-testing.md
+├── code-review.md → ~/gt/keeper/skills/seed-code-review.md
+├── document-review.md → ~/gt/keeper/skills/seed-document-review.md
+├── acceptance-testing.md → ~/gt/keeper/skills/seed-acceptance-testing.md
+├── pr-merge.md → ~/gt/keeper/skills/seed-pr-merge.md
 └── handoff.md → (standalone command)
 ```
 
@@ -207,7 +207,7 @@ Set `workflow.default_formula` in the config. This determines which formula is u
 
 When a polecat is dispatched into a rig, it operates within all three layers simultaneously:
 
-- **Skills** arrive via `.claude/commands/` symlinks — the polecat invokes `/testing`, `/implementation`, etc.
+- **Skills** arrive via `.claude/commands/` symlinks — the polecat invokes `/seed-testing`, `/seed-implementation`, etc.
 - **Formulas** arrive via the dispatched molecule — the polecat follows steps from `bd mol current`
 - **Rig config** arrives via variable injection — the molecule's step descriptions contain the rig's actual commands
 
@@ -257,48 +257,48 @@ The polecat reads the bead spec and confirms understanding. No skill reference �
 
 #### 4. Implement step
 
-Step description says: `Implement the feature per /implementation.`
+Step description says: `Implement the feature per /seed-implementation.`
 
-The polecat invokes `/implementation`, which loads `skills/implementation.md`. The skill guides the polecat through: read the spec completely, read existing code patterns, plan changes, implement incrementally, stay in scope, verify against spec.
+The polecat invokes `/seed-implementation`, which loads `skills/seed-implementation.md`. The skill guides the polecat through: read the spec completely, read existing code patterns, plan changes, implement incrementally, stay in scope, verify against spec.
 
-**Layer 1 contributes:** The `/implementation` skill provides methodology. **Layer 2 contributes:** The formula placed implementation after spec-check.
+**Layer 1 contributes:** The `/seed-implementation` skill provides methodology. **Layer 2 contributes:** The formula placed implementation after spec-check.
 
 #### 5. Test step
 
-Step description says: `Write and run tests per /testing.`
+Step description says: `Write and run tests per /seed-testing.`
 
-The polecat invokes `/testing`. The skill guides test writing methodology. The molecule's context includes `test_command="bash tests/cook-all-formulas.sh"` — the polecat runs this as the minimum quality gate, then applies skill judgment on top (adding tests for the specific fix, checking edge cases).
+The polecat invokes `/seed-testing`. The skill guides test writing methodology. The molecule's context includes `test_command="bash tests/cook-all-formulas.sh"` — the polecat runs this as the minimum quality gate, then applies skill judgment on top (adding tests for the specific fix, checking edge cases).
 
 **All three layers contribute:**
-- **Layer 1 (Skill):** `/testing` provides methodology — what kinds of tests to write, how to evaluate coverage, red flags for inadequate testing
+- **Layer 1 (Skill):** `/seed-testing` provides methodology — what kinds of tests to write, how to evaluate coverage, red flags for inadequate testing
 - **Layer 2 (Formula):** Placed testing after implementation, references the checklist `tests-pass`
 - **Layer 3 (Rig config):** Provided `test_command` — the concrete command to execute
 
 #### 6. Review step (human gate)
 
-Step description says: `Review the implementation per /code-review. Create PR. This is a human gate.`
+Step description says: `Review the implementation per /seed-code-review. Create PR. This is a human gate.`
 
-The polecat creates a PR, invokes `/code-review` for self-review, then escalates. A human reviews and approves. The molecule's human gate blocks further progress until approval.
+The polecat creates a PR, invokes `/seed-code-review` for self-review, then escalates. A human reviews and approves. The molecule's human gate blocks further progress until approval.
 
-**Layer 1 contributes:** `/code-review` skill defines review methodology. **Layer 2 contributes:** The formula encoded this as a human gate (`gate = { type = "human" }`).
+**Layer 1 contributes:** `/seed-code-review` skill defines review methodology. **Layer 2 contributes:** The formula encoded this as a human gate (`gate = { type = "human" }`).
 
 #### 7. Merge step
 
-Step description says: `Merge per /pr-merge.`
+Step description says: `Merge per /seed-pr-merge.`
 
-The polecat follows the `/pr-merge` skill to squash-merge the PR.
+The polecat follows the `/seed-pr-merge` skill to squash-merge the PR.
 
-**Layer 1 contributes:** `/pr-merge` skill. **Layer 2 contributes:** Sequencing (merge requires review).
+**Layer 1 contributes:** `/seed-pr-merge` skill. **Layer 2 contributes:** Sequencing (merge requires review).
 
 #### Summary of layer contributions
 
 | Step | Layer 1 (Skill) | Layer 2 (Formula) | Layer 3 (Config) |
 |------|-----------------|-------------------|------------------|
 | Spec check | — | Step definition | — |
-| Implement | `/implementation` | Sequencing, checklist | — |
-| Test | `/testing` | Sequencing, checklist | `test_command` |
-| Review | `/code-review` | Human gate | — |
-| Merge | `/pr-merge` | Sequencing, checklist | — |
+| Implement | `/seed-implementation` | Sequencing, checklist | — |
+| Test | `/seed-testing` | Sequencing, checklist | `test_command` |
+| Review | `/seed-code-review` | Human gate | — |
+| Merge | `/seed-pr-merge` | Sequencing, checklist | — |
 
 ---
 

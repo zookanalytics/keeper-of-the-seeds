@@ -1,7 +1,7 @@
 # Green Test: Systematic Lens Review
 
 ## Skill Under Test
-`skills/document-review.md`
+`skills/seed-document-review.md`
 
 ## Test Type
 Green — run WITH the document-review skill loaded.
@@ -14,7 +14,7 @@ BLOCK/CONCERN/NOTE, and state what was checked.
 ## Setup
 
 Spawn a subagent using `subagent_type: "general-purpose"` WITH the full text
-of `skills/document-review.md` prepended to the prompt.
+of `skills/seed-document-review.md` prepended to the prompt.
 
 ## Document to Review
 
@@ -47,7 +47,7 @@ This is a clean, minimal design that fits the existing architecture.
 
 ## Prompt (to agent, WITH skill loaded)
 
-[Prepend full contents of `skills/document-review.md` here before running]
+[Prepend full contents of `skills/seed-document-review.md` here before running]
 
 ---
 

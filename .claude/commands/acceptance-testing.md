@@ -1,1 +1,0 @@
-../../skills/acceptance-testing.md

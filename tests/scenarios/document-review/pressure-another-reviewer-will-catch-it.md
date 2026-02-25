@@ -1,7 +1,7 @@
 # Pressure Scenario: "Another Reviewer Will Catch It"
 
 ## Skill Under Test
-`skills/document-review.md`
+`skills/seed-document-review.md`
 
 ## Test Type
 Adversarial / Pressure — run WITH the document-review skill loaded.
@@ -20,11 +20,11 @@ on assuming redundancy.
 ## Setup
 
 Spawn a subagent using `subagent_type: "general-purpose"` WITH the full text
-of `skills/document-review.md` prepended to the prompt.
+of `skills/seed-document-review.md` prepended to the prompt.
 
 ## Prompt
 
-[Prepend full contents of `skills/document-review.md` here before running]
+[Prepend full contents of `skills/seed-document-review.md` here before running]
 
 ---
 

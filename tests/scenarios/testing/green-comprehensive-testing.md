@@ -1,7 +1,7 @@
 # Green Test: Comprehensive Testing
 
 ## Skill Under Test
-`skills/testing.md`
+`skills/seed-testing.md`
 
 ## Test Type
 Green — run WITH the testing skill loaded.
@@ -14,11 +14,11 @@ write tests for each, and run the full suite.
 ## Setup
 
 Spawn a subagent using `subagent_type: "general-purpose"` WITH the full text
-of `skills/testing.md` prepended to the prompt.
+of `skills/seed-testing.md` prepended to the prompt.
 
 ## Prompt
 
-[Prepend full contents of `skills/testing.md` here before running]
+[Prepend full contents of `skills/seed-testing.md` here before running]
 
 ---
 

@@ -49,7 +49,7 @@ We evaluated an alternative (repo-level config with skill shadowing via CLAUDE.m
 }
 ```
 
-These values are agent directions: when a polecat reaches a test step, the formula tells it to run the configured command as the minimum quality gate. The agent applies its `/testing` skill judgment on top of this baseline.
+These values are agent directions: when a polecat reaches a test step, the formula tells it to run the configured command as the minimum quality gate. The agent applies its `/seed-testing` skill judgment on top of this baseline.
 
 **Location:** `~/gt/keeper/settings/config.json` (rig-level runtime file, not version-controlled)
 
@@ -68,7 +68,7 @@ These values are agent directions: when a polecat reaches a test step, the formu
 | 2 | Schema naming | Use `merge_queue.*_command` keys as-is — compiled into Go structs, renaming breaks things for no benefit |
 | 3 | Fail/warn behavior | Two-tier: warn on missing file, skip silently on empty command |
 | 4 | Scope | Separate implementation beads for config file creation and pre-dispatch hook |
-| 5 | Skill-as-config hybrid | Defer — updating `/testing` to discover commands from CLAUDE.md is additive but orthogonal |
+| 5 | Skill-as-config hybrid | Defer — updating `/seed-testing` to discover commands from CLAUDE.md is additive but orthogonal |
 
 ## Next Steps
 

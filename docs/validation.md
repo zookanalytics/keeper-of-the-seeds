@@ -239,11 +239,11 @@ Self-check mechanism for agents to recognize when they're rationalizing:
 
 | Skill | Priority | Notes |
 |-------|----------|-------|
-| `/code-review` | High | Discipline skill — needs pressure scenarios |
-| `/testing` | High | Discipline skill — needs pressure scenarios for test-skipping |
-| `/implementation` | Medium | Technique skill — needs application scenarios |
-| `/acceptance-testing` | Medium | Discipline skill (TEA) — needs red-test for test-after violations |
-| `/pr-merge` | Low | Reference/procedural — lower risk of rationalization |
+| `/seed-code-review` | High | Discipline skill — needs pressure scenarios |
+| `/seed-testing` | High | Discipline skill — needs pressure scenarios for test-skipping |
+| `/seed-implementation` | Medium | Technique skill — needs application scenarios |
+| `/seed-acceptance-testing` | Medium | Discipline skill (TEA) — needs red-test for test-after violations |
+| `/seed-pr-merge` | Low | Reference/procedural — lower risk of rationalization |
 
 ### Test Execution
 

@@ -1,7 +1,7 @@
 # Red Test: Tests Written After Implementation
 
 ## Skill Under Test
-`skills/acceptance-testing.md`
+`skills/seed-acceptance-testing.md`
 
 ## Test Type
 Red — run WITHOUT the acceptance-testing skill loaded.
