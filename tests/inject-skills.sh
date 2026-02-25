@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Tests for hooks/session-start/inject-skills.sh
 # Run from repo root: bash tests/inject-skills.sh
+# shellcheck disable=SC2016  # Single-quoted mock scripts intentionally avoid expansion
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
@@ -20,8 +21,6 @@ run_test() {
   local output actual_exit
   output=$("$HOOK" "$@" 2>&1) || true
   actual_exit=$?
-
-  local pass=true
 
   if [[ "$actual_exit" -ne "$expected_exit" ]]; then
     echo "FAIL  $desc (expected exit $expected_exit, got $actual_exit)"
